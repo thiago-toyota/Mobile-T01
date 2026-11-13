@@ -14,17 +14,23 @@ class SoupBowl extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = min(constraints.maxWidth, 560.0);
+        // Tigela larga: até 900 de largura.
+        final width = min(constraints.maxWidth, 900.0);
         return Center(
           child: SizedBox(
             width: width,
             child: CustomPaint(
-              painter: _BowlPainter(),
+              painter: BowlPainter(),
               child: ConstrainedBox(
-                // Altura mínima = 85% da largura (quase um círculo).
-                constraints: BoxConstraints(minHeight: width * 0.85),
+                // Altura mínima: 55% da largura, e nunca menos que 300.
+                constraints: BoxConstraints(minHeight: max(width * 0.55, 300.0)),
                 child: Padding(
-                  padding: EdgeInsets.all(width * 0.14),
+                  // A expressão fica numa linha só, no meio da tigela,
+                  // onde ela é mais larga. Por isso a margem lateral é pequena.
+                  padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.06,
+                    vertical: width * 0.06,
+                  ),
                   child: Center(child: child),
                 ),
               ),
@@ -36,7 +42,66 @@ class SoupBowl extends StatelessWidget {
   }
 }
 
-class _BowlPainter extends CustomPainter {
+// Tamanho da tigela do fundo para o espaço disponível na tela.
+// Fica numa função para outros widgets (como as colheres) poderem usar a
+// mesma conta e acompanhar a tigela quando ela encolhe.
+double bowlSizeFor(BoxConstraints constraints) =>
+    min(constraints.maxWidth, constraints.maxHeight);
+
+// Tigela grande e translúcida que fica no fundo das telas.
+// É colocada pelo PageBackground, atrás do conteúdo de cada página.
+class SoupBackground extends StatelessWidget {
+  const SoupBackground({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.surface,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final size = bowlSizeFor(constraints);
+          return Center(
+            child: Opacity(
+              opacity: 0.35, // quanto menor, mais transparente
+              child: SizedBox(
+                width: size,
+                height: size * 0.9,
+                child: CustomPaint(painter: BowlPainter()),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Fundo de uma página. Cada página carrega o seu próprio fundo OPACO
+// (com ou sem a sopa translúcida). Assim, na troca de telas, a página nova
+// cobre a antiga por completo e as duas não se misturam.
+class PageBackground extends StatelessWidget {
+  const PageBackground({super.key, required this.child, this.soup = true});
+
+  final Widget child;
+  final bool soup; // false: fundo liso (usado na tela de jogo)
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        if (soup)
+          const SoupBackground()
+        else
+          ColoredBox(color: Theme.of(context).colorScheme.surface),
+        child,
+      ],
+    );
+  }
+}
+
+// Desenha a tigela dentro do espaço que receber.
+class BowlPainter extends CustomPainter {
   // Pedacinhos boiando no caldo (posição em fração da tigela).
   // Posições pares são cenouras, ímpares são salsinha.
   static const _bits = [

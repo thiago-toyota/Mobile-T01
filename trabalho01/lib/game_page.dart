@@ -64,9 +64,6 @@ class _GamePageState extends ConsumerState<GamePage>
   // Animação: os macarrões ficam balançando de leve no caldo (repete para sempre).
   late final AnimationController _bob;
 
-  // true enquanto o jogador está arrastando um macarrão.
-  // Só então os pontos de inserção ficam visíveis.
-  bool _dragging = false;
 
   late final List<String> _tray; // macarrões do prato (infinitos)
 
@@ -138,12 +135,10 @@ class _GamePageState extends ConsumerState<GamePage>
   void _place(int index, Piece piece) {
     // Veio do prato: aumenta a quantidade usada, então confere o limite.
     if (piece.fromIndex == null && _usedCount >= maxOperators) {
-      setState(() => _dragging = false);
       _showMessage('Limite de $maxOperators operadores na sopa');
       return;
     }
     setState(() {
-      _dragging = false;
       if (piece.fromIndex == null) {
         _items.insert(index, piece.symbol);
       } else {
@@ -159,10 +154,8 @@ class _GamePageState extends ConsumerState<GamePage>
   // Soltou fora de qualquer ponto de inserção: se estava na sopa, o macarrão some.
   // (O prato é infinito, então não precisa devolver nada.)
   void _dropOutside(Piece piece) {
-    setState(() {
-      _dragging = false;
-      if (piece.fromIndex != null) _items.removeAt(piece.fromIndex!);
-    });
+    if (piece.fromIndex == null) return;
+    setState(() => _items.removeAt(piece.fromIndex!));
   }
 
   // Vassourinha: tira todos os operadores, ficam só os algarismos.
@@ -174,7 +167,11 @@ class _GamePageState extends ConsumerState<GamePage>
 
   void _check() {
     try {
-      final correct = checkEquation(_items, allowFractions: allowsFractions(_level));
+      final correct = checkEquation(
+        _items,
+        allowFractions: allowsFractions(_level),
+        allowPower: allowsPower(_level),
+      );
       if (correct) {
         _timer?.cancel();
         _showEndDialog('Acertou!', 'A igualdade está correta.');
@@ -206,8 +203,6 @@ class _GamePageState extends ConsumerState<GamePage>
       childWhenDragging: piece.fromIndex == null
           ? Noodle(piece.symbol)
           : Opacity(opacity: 0.3, child: Noodle(piece.symbol)),
-      onDragStarted: () => setState(() => _dragging = true),
-      onDragEnd: (_) => setState(() => _dragging = false),
       onDraggableCanceled: (_, __) => _dropOutside(piece),
       child: Noodle(piece.symbol),
     );
@@ -238,21 +233,21 @@ class _GamePageState extends ConsumerState<GamePage>
       onAcceptWithDetails: (details) => _place(index, details.data),
       builder: (context, candidates, rejected) {
         final hovering = candidates.isNotEmpty;
-        // Parado: invisível (só um espaço vazio).
-        // Arrastando: aparece de leve. Com o macarrão em cima: destaca.
-        // O AnimatedContainer faz a troca de cor acontecer suavemente.
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+        // O espaço é sempre invisível. A única pista aparece quando o macarrão
+        // está em cima dele: um tracinho laranja mostra onde ele vai entrar.
+        // (Para não mostrar nada, é só deixar a largura do tracinho em 0.)
+        return SizedBox(
           width: gap ? 40 : 24,
           height: 56,
-          decoration: BoxDecoration(
-            color: Colors.white.withAlpha(hovering ? 200 : (_dragging ? 70 : 0)),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: hovering
-                  ? Colors.orange
-                  : (_dragging ? Colors.brown.shade300 : Colors.transparent),
-              width: hovering ? 3 : 2,
+          child: Center(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 120),
+              width: hovering ? 4 : 0,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
         );
@@ -262,31 +257,34 @@ class _GamePageState extends ConsumerState<GamePage>
 
   // A expressão boiando no caldo: ponto de inserção, item, ponto, item...
   Widget _soup() {
+    // Uma linha só (Row). O FittedBox encolhe a linha inteira se ela não couber
+    // na largura da tigela (ex.: 4 algarismos + 9 símbolos, ou tela pequena).
     return SoupBowl(
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 4,
-        runSpacing: 10,
-        children: [
-          for (var i = 0; i <= _items.length; i++) ...[
-            _insertionPoint(i),
-            if (i < _items.length)
-              _float(
-                i,
-                _isDigitToken(_items[i])
-                    ? Noodle(_items[i], big: true) // algarismo: fixo
-                    : _draggable(Piece(_items[i], fromIndex: i)),
-              ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            for (var i = 0; i <= _items.length; i++) ...[
+              _insertionPoint(i),
+              if (i < _items.length)
+                _float(
+                  i,
+                  _isDigitToken(_items[i])
+                      ? Noodle(_items[i], big: true) // algarismo: fixo
+                      : _draggable(Piece(_items[i], fromIndex: i)),
+                ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
 
   // Guardanapo com a fórmula em LaTeX.
   Widget _napkin() {
-    final latex = previewLatex(_items);
+    final latex = previewLatex(_items, allowPower: allowsPower(_level));
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
@@ -366,7 +364,7 @@ class _GamePageState extends ConsumerState<GamePage>
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
+            constraints: const BoxConstraints(maxWidth: 960),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

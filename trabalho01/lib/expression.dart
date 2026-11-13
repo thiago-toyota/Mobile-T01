@@ -222,9 +222,32 @@ class ExpressionParser {
   }
 }
 
+// Dois '*' seguidos viram uma potência: [2, *, *, 3] vira [2, **, 3].
+// (Só é usado nos níveis que permitem potência.)
+List<String> mergePowers(List<String> tokens) {
+  final merged = <String>[];
+  var i = 0;
+  while (i < tokens.length) {
+    if (tokens[i] == '*' && i + 1 < tokens.length && tokens[i + 1] == '*') {
+      merged.add('**');
+      i += 2; // consumiu os dois asteriscos
+    } else {
+      merged.add(tokens[i]);
+      i++;
+    }
+  }
+  return merged;
+}
+
 // Confere a igualdade inteira. Retorna true se os dois lados são iguais,
 // false se são diferentes, e lança GameException se a expressão é inválida.
-bool checkEquation(List<String> tokens, {required bool allowFractions}) {
+// allowPower: se o nível aceita potência (e então '* *' vale como '**').
+bool checkEquation(
+  List<String> input, {
+  required bool allowFractions,
+  required bool allowPower,
+}) {
+  final tokens = allowPower ? mergePowers(input) : input;
   final equalsCount = tokens.where((t) => t == '=').length;
   if (equalsCount == 0) throw const GameException(GameError.noEquals);
   if (equalsCount > 1) throw const GameException(GameError.manyEquals);
@@ -247,7 +270,8 @@ bool checkEquation(List<String> tokens, {required bool allowFractions}) {
 // Se não for, mostra os símbolos soltos, do jeito que estão.
 // ---------------------------------------------------------------------------
 
-String previewLatex(List<String> tokens) {
+String previewLatex(List<String> input, {required bool allowPower}) {
+  final tokens = allowPower ? mergePowers(input) : input;
   final at = tokens.indexOf('=');
   final sides = at == -1
       ? [tokens]
