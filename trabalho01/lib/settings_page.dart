@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'music.dart';
 
 import 'state.dart';
 
@@ -262,6 +263,26 @@ class SettingsPage extends ConsumerWidget {
           ),
 
           const SizedBox(height: 24),
+
+          Consumer(
+            builder: (context, ref, child) {
+              final musicEnabled = ref.watch(musicProvider);
+
+              return IconButton(
+                tooltip: musicEnabled
+                    ? 'Desativar música'
+                    : 'Ativar música',
+                onPressed: () {
+                  ref.read(musicProvider.notifier).toggleMusic();
+                },
+                icon: Icon(
+                  musicEnabled
+                      ? Icons.music_note
+                      : Icons.music_off,
+                ),
+              );
+            },
+          ),
 
           // ---------------------------------------------------------------
           // Restaurar configurações
