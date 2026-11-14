@@ -30,6 +30,8 @@ class _SpoonButtonState extends State<SpoonButton> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovering = true),
@@ -59,10 +61,10 @@ class _SpoonButtonState extends State<SpoonButton> {
                           fit: BoxFit.scaleDown,
                           child: Text(
                             widget.title,
-                            style: const TextStyle(
-                              fontSize: 20,
+                            // Estilo do tema: fonte e tamanho vêm das configurações.
+                            style: textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF6B4A12),
+                              color: const Color(0xFF6B4A12),
                             ),
                           ),
                         ),
@@ -77,7 +79,9 @@ class _SpoonButtonState extends State<SpoonButton> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             widget.symbols,
-                            style: const TextStyle(fontSize: 16, color: Colors.black87),
+                            style: textTheme.bodyLarge?.copyWith(
+                              color: Colors.black87,
+                            ),
                           ),
                         ),
                       ),

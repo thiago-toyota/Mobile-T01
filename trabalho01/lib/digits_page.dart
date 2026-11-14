@@ -46,7 +46,11 @@ class _DigitsPageState extends ConsumerState<DigitsPage> {
                   controller: _controller,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 32, letterSpacing: 8),
+                  // Estilo do tema: fonte e tamanho vêm das configurações.
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(letterSpacing: 8),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(4),

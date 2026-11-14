@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'expression.dart';
 import 'level.dart';
 import 'noodle.dart';
+import 'score.dart';
 import 'soup_bowl.dart';
 import 'state.dart';
 
@@ -102,8 +103,10 @@ class _GamePageState extends ConsumerState<GamePage>
   void _tick() {
     setState(() => _secondsLeft--);
     if (_secondsLeft <= 0) {
-      _timer?.cancel();
-      _showEndDialog('Tempo esgotado', 'Não deu tempo desta vez.');
+      // O jogo não acaba: perde pontos e o relógio recomeça.
+      ref.read(scoreProvider.notifier).penalize(timeoutPenalty);
+      setState(() => _secondsLeft = _gameSeconds);
+      _showMessage('Tempo esgotado: -$timeoutPenalty pontos');
     }
   }
 
@@ -174,7 +177,10 @@ class _GamePageState extends ConsumerState<GamePage>
       );
       if (correct) {
         _timer?.cancel();
-        _showEndDialog('Acertou!', 'A igualdade está correta.');
+        // Os pontos dos símbolos usados passam a fazer parte do score.
+        final earned = soupPoints(_items);
+        ref.read(scoreProvider.notifier).add(earned);
+        _showEndDialog('Acertou!', 'A igualdade está correta. +$earned pontos');
       } else {
         _showMessage('Os dois lados são diferentes');
       }
@@ -347,11 +353,26 @@ class _GamePageState extends ConsumerState<GamePage>
       );
     }
 
+    // Score mostrado = pontos já garantidos + pontos dos símbolos na sopa agora.
+    final score = ref.watch(scoreProvider) + soupPoints(_items);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Tempo: $_secondsLeft',
-          style: TextStyle(color: _secondsLeft <= 10 ? Colors.red : null),
+        // O FittedBox encolhe tempo e score juntos se a tela for estreita.
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Tempo: $_secondsLeft',
+                style: TextStyle(color: _secondsLeft <= 10 ? Colors.red : null),
+              ),
+              const SizedBox(width: 24),
+              Text('Score: $score'),
+            ],
+          ),
         ),
         actions: [
           IconButton(

@@ -20,22 +20,20 @@ class LevelPage extends ConsumerWidget {
   const LevelPage({super.key});
 
   // Uma colher que escolhe o nível ao ser tocada.
-Widget _spoon(BuildContext context, WidgetRef ref, Level level) {
-  return FittedBox(
-    fit: BoxFit.scaleDown,
-    child: SizedBox(
-      width: spoonDesignWidth,
-      child: SpoonButton(
-        title: _levelNames[level]!,
-        symbols: levelSymbols[level]!.map(symbolLabel).join(' '),
-        onTap: () {
-          ref.read(levelProvider.notifier).select(level);
-          context.push('/digits');
-        },
-      ),
-    ),
-  );
-}
+  Widget _spoon(BuildContext context, WidgetRef ref, Level level) {
+    return SpoonButton(
+      title: _levelNames[level]!,
+      // A potência não tem macarrão próprio, então aparece como "× ×".
+      symbols: [
+        ...levelSymbols[level]!.map(symbolLabel),
+        if (allowsPower(level)) '××',
+      ].join(' '),
+      onTap: () {
+        ref.read(levelProvider.notifier).select(level);
+        context.push('/digits');
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,7 +43,7 @@ Widget _spoon(BuildContext context, WidgetRef ref, Level level) {
       builder: (context, constraints) {
         // A colher mede 85% da tigela do fundo (no máximo o tamanho de projeto).
         // Quando a tigela encolhe para caber na tela, a colher encolhe junto.
-        final spoonWidth = min(spoonDesignWidth, bowlSizeFor(constraints) * 0.70);
+        final spoonWidth = min(spoonDesignWidth, bowlSizeFor(constraints) * 0.85);
         final scale = spoonWidth / spoonDesignWidth;
 
         return Scaffold(
