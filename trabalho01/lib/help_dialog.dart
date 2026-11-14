@@ -25,13 +25,24 @@ Future<void> showHelpDialog(BuildContext context) {
             Text('• Dois algarismos lado a lado não formam um número maior: '
                 'é preciso um operador entre eles.'),
             SizedBox(height: 6),
-            Text('• Nos níveis com potência, dois × seguidos (× ×) '
+            Text('• Nos níveis Fácil e Intermediário, dois × seguidos (× ×) '
                 'valem uma potência.'),
-            SizedBox(height: 6),
-            Text('• Você tem 30 segundos. Toque em Verificar para testar.'),
             SizedBox(height: 6),
             Text('• Fora do nível Fácil, divisões e resultados não inteiros '
                 'não são permitidos.'),
+            SizedBox(height: 12),
+            Text('Tempo e pontos',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 6),
+            Text('• Você tem 30 segundos. Toque em Verificar para testar.'),
+            SizedBox(height: 6),
+            Text('• Se o tempo acabar, você perde 10 pontos e o relógio '
+                'reinicia.'),
+            SizedBox(height: 6),
+            Text('• Cada símbolo na sopa vale pontos: + − × ÷ base e teto '
+                'valem 10; potência (× ×), raízes valem 20; ! e módulo '
+                'valem 30. Parênteses não valem nada.'),
+            SizedBox(height: 6),
           ],
         ),
       ),

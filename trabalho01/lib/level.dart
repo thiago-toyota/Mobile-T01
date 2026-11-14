@@ -6,12 +6,13 @@ enum Level { easy, medium, advanced, hard }
 const _basic = ['+', '-', '*', '/', '(', ')'];
 
 // Símbolos de cada nível, conforme a especificação do trabalho.
-// '**' é a exponencial, '|' é o módulo (usado duas vezes: abre e fecha),
+// '|' é o módulo (usado duas vezes: abre e fecha),
 // ⌊ ⌋ é a base (floor) e ⌈ ⌉ é o teto (ceil).
-// Conforme a especificação: o nível Fácil tem todos os símbolos.
+// A potência não tem macarrão próprio: ela é feita com dois '*' seguidos
+// (veja allowsPower).
 const Map<Level, List<String>> levelSymbols = {
-  Level.easy: [..._basic, '√', '∛', '!', '**', '|', '⌊', '⌋', '⌈', '⌉'],
-  Level.medium: [..._basic, '√', '∛', '!', '**', '|'],
+  Level.easy: [..._basic, '√', '∛', '!', '|', '⌊', '⌋', '⌈', '⌉'],
+  Level.medium: [..._basic, '√', '∛', '!', '|'],
   Level.advanced: [..._basic, '√', '!', '|'],
   Level.hard: [..._basic, '|'],
 };
@@ -19,9 +20,9 @@ const Map<Level, List<String>> levelSymbols = {
 // Só o nível Fácil aceita divisão com resultado não inteiro.
 bool allowsFractions(Level level) => level == Level.easy;
 
-// Só os níveis que têm o símbolo '**' aceitam potência.
-// Neles, dois '*' seguidos também valem como potência.
-bool allowsPower(Level level) => levelSymbols[level]!.contains('**');
+// Potência (dois '*' seguidos): só nos níveis Fácil e Intermediário,
+// que são os que têm a exponencial na especificação.
+bool allowsPower(Level level) => level == Level.easy || level == Level.medium;
 
 // Quantos símbolos (operadores, parênteses e o '=') cabem na sopa ao mesmo tempo.
 const int maxOperators = 9;
@@ -31,6 +32,6 @@ const int maxOperators = 9;
 List<String> buildTray(Level level) => ['=', ...levelSymbols[level]!];
 
 // Como cada símbolo aparece na tela (o código interno usa '*' e '/').
-const _labels = {'*': '×', '/': '÷', '**': '^'};
+const _labels = {'*': '×', '/': '÷'};
 
 String symbolLabel(String symbol) => _labels[symbol] ?? symbol;
