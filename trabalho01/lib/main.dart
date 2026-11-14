@@ -103,6 +103,7 @@ ThemeData _buildTheme(AppSettings settings, Brightness brightness) {
     final settings = ref.watch(settingsProvider);
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Sopa de Contas',
       routerConfig: router,
 

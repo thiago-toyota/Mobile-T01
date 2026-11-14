@@ -55,7 +55,8 @@ class AppShell extends StatelessWidget {
           return true;
         },
         onTap: (index) {
-          if (index == _homeIndex) context.go('/levels');
+          // A casa leva de volta à escolha do modo.
+          if (index == _homeIndex) context.go('/modes');
         },
       ),
     );

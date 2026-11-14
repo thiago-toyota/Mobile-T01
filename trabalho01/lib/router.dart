@@ -8,6 +8,7 @@ import 'digits_page.dart';
 import 'game_page.dart';
 import 'level_page.dart';
 import 'login_page.dart';
+import 'mode_page.dart';
 import 'settings_page.dart';
 import 'shell_page.dart';
 import 'soup_bowl.dart';
@@ -77,6 +78,11 @@ final router = GoRouter(
       builder: (context, state, child) =>
           AppShell(location: state.uri.path, child: child),
       routes: [
+        // Fluxo: login -> modo -> nível -> (algarismos) -> jogo
+        GoRoute(
+          path: '/modes',
+          pageBuilder: (context, state) => _page(state, const ModePage()),
+        ),
         GoRoute(
           path: '/levels',
           pageBuilder: (context, state) => _page(state, const LevelPage()),
@@ -91,6 +97,7 @@ final router = GoRouter(
           pageBuilder: (context, state) =>
               _page(state, const GamePage(), soup: false),
         ),
+        // Não é mais usada pela barra (as configurações abrem numa janela).
         GoRoute(
           path: '/settings',
           pageBuilder: (context, state) => _page(state, const SettingsPage()),

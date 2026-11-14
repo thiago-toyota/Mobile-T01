@@ -8,10 +8,12 @@ import 'package:go_router/go_router.dart';
 
 import 'expression.dart';
 import 'level.dart';
+import 'mode.dart';
 import 'noodle.dart';
 import 'score.dart';
 import 'soup_bowl.dart';
 import 'state.dart';
+import 'tutorial_dialog.dart';
 
 const int _gameSeconds = 30;
 
@@ -62,6 +64,9 @@ class _GamePageState extends ConsumerState<GamePage>
     with SingleTickerProviderStateMixin {
   late final Level _level;
 
+  // true no modo Educativo: sem tempo, sem pontos e com a janela de explicação.
+  late final bool _tutorial;
+
   // Animação: os macarrões ficam balançando de leve no caldo (repete para sempre).
   late final AnimationController _bob;
 
@@ -82,13 +87,33 @@ class _GamePageState extends ConsumerState<GamePage>
     _bob = AnimationController(vsync: this, duration: const Duration(seconds: 3))
       ..repeat();
     _level = ref.read(levelProvider);
+    _tutorial = ref.read(modeProvider) == GameMode.educational;
     _tray = buildTray(_level);
     final digits = ref.read(digitsProvider);
     _items.addAll(digits.split(''));
-    // Só começa a contar se os 4 algarismos existem.
-    if (digits.length == 4) {
+    // O relógio só roda se os 4 algarismos existem e não é o tutorial.
+    if (digits.length == 4 && !_tutorial) {
       _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
     }
+    // No tutorial, a janela de explicação abre assim que a tela aparece.
+    if (_tutorial) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _showTutorial();
+      });
+    }
+  }
+
+  void _showTutorial() {
+    showTutorialDialog(context, onShowExample: _fillExample);
+  }
+
+  // Monta o exemplo da explicação na sopa: 2 × 3 = 3 + 3.
+  void _fillExample() {
+    setState(() {
+      _items
+        ..clear()
+        ..addAll(['2', '*', '3', '=', '3', '+', '3']);
+    });
   }
 
   @override
@@ -126,7 +151,7 @@ class _GamePageState extends ConsumerState<GamePage>
       ),
     );
     if (!mounted) return;
-    context.go('/levels');
+    context.go('/modes');
   }
 
   // ------------------------------------------------- mover os macarrões
@@ -177,6 +202,11 @@ class _GamePageState extends ConsumerState<GamePage>
       );
       if (correct) {
         _timer?.cancel();
+        if (_tutorial) {
+          // O tutorial não dá pontos.
+          _showEndDialog('Muito bem!', 'Você montou uma igualdade correta.');
+          return;
+        }
         // Os pontos dos símbolos usados passam a fazer parte do score.
         final earned = soupPoints(_items);
         ref.read(scoreProvider.notifier).add(earned);
@@ -346,7 +376,7 @@ class _GamePageState extends ConsumerState<GamePage>
       return Scaffold(
         body: Center(
           child: FilledButton(
-            onPressed: () => context.go('/levels'),
+            onPressed: () => context.go('/modes'),
             child: const Text('Voltar ao início'),
           ),
         ),
@@ -358,23 +388,33 @@ class _GamePageState extends ConsumerState<GamePage>
 
     return Scaffold(
       appBar: AppBar(
-        // O FittedBox encolhe tempo e score juntos se a tela for estreita.
-        title: FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.centerLeft,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Tempo: $_secondsLeft',
-                style: TextStyle(color: _secondsLeft <= 10 ? Colors.red : null),
+        // No tutorial não há tempo nem pontos. Nos outros modos, o FittedBox
+        // encolhe tempo e score juntos se a tela for estreita.
+        title: _tutorial
+            ? const Text('Educativo')
+            : FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Tempo: $_secondsLeft',
+                      style: TextStyle(color: _secondsLeft <= 10 ? Colors.red : null),
+                    ),
+                    const SizedBox(width: 24),
+                    Text('Score: $score'),
+                  ],
+                ),
               ),
-              const SizedBox(width: 24),
-              Text('Score: $score'),
-            ],
-          ),
-        ),
         actions: [
+          // No tutorial, dá para abrir a explicação de novo.
+          if (_tutorial)
+            IconButton(
+              tooltip: 'Explicação',
+              icon: const Icon(Icons.info_outline),
+              onPressed: _showTutorial,
+            ),
           IconButton(
             tooltip: 'Limpar',
             icon: const Icon(Icons.cleaning_services),

@@ -39,7 +39,8 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   FilledButton(
-                    onPressed: () => context.go('/levels'),
+                    // Depois do login, o jogador escolhe o modo de jogo.
+                    onPressed: () => context.go('/modes'),
                     child: const Text('Entrar'),
                   ),
                 ],
