@@ -31,6 +31,9 @@ int soupPoints(List<String> tokens) =>
 // Pontos perdidos quando o tempo acaba.
 const int timeoutPenalty = 10;
 
+// Pontos perdidos ao pular um número (modo Aleatório).
+const int skipPenalty = 30;
+
 // Pontuação já garantida do jogador (soma dos números que ele resolveu,
 // menos as penalidades de tempo). Os pontos da sopa em andamento são somados
 // a isto só na hora de mostrar, e entram aqui quando o jogador acerta.

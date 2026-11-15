@@ -67,6 +67,9 @@ class _GamePageState extends ConsumerState<GamePage>
   // true no modo Educativo: sem tempo, sem pontos e com a janela de explicação.
   late final bool _tutorial;
 
+  // true no modo Aleatório: o jogador pode pular o número (perde pontos).
+  late final bool _isRandomMode;
+
   // Animação: os macarrões ficam balançando de leve no caldo (repete para sempre).
   late final AnimationController _bob;
 
@@ -87,7 +90,9 @@ class _GamePageState extends ConsumerState<GamePage>
     _bob = AnimationController(vsync: this, duration: const Duration(seconds: 3))
       ..repeat();
     _level = ref.read(levelProvider);
-    _tutorial = ref.read(modeProvider) == GameMode.educational;
+    final mode = ref.read(modeProvider);
+    _tutorial = mode == GameMode.educational;
+    _isRandomMode = mode == GameMode.random;
     _tray = buildTray(_level);
     final digits = ref.read(digitsProvider);
     _items.addAll(digits.split(''));
@@ -101,6 +106,55 @@ class _GamePageState extends ConsumerState<GamePage>
         if (mounted) _showTutorial();
       });
     }
+  }
+
+  // Pular o número (só no modo Aleatório): confirma, tira pontos,
+  // sorteia outro número e recomeça o relógio.
+  Future<void> _skip() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Pular este número?'),
+        content: Text('Você perde $skipPenalty pontos e recebe outro número.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Pular'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    ref.read(scoreProvider.notifier).penalize(skipPenalty);
+
+    _loadNewNumber();
+  }
+
+  // Modo Aleatório: coloca um novo número na sopa (ao pular ou ao acertar).
+  void _loadNewNumber() {
+    // Sorteia outro número, diferente do atual.
+    final old = ref.read(digitsProvider);
+    var digits = randomDigits();
+    while (digits == old) {
+      digits = randomDigits();
+    }
+    ref.read(digitsProvider.notifier).set(digits);
+
+    // A sopa volta a ter só os algarismos novos (os símbolos usados somem,
+    // junto com os pontos deles) e o relógio recomeça do início.
+    setState(() {
+      _items
+        ..clear()
+        ..addAll(digits.split(''));
+      _secondsLeft = _gameSeconds;
+    });
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
   }
 
   void _showTutorial() {
@@ -135,7 +189,13 @@ class _GamePageState extends ConsumerState<GamePage>
     }
   }
 
-  Future<void> _showEndDialog(String title, String message) async {
+  // Mostra o resultado. Depois de fechar, no modo Aleatório (continueRandom)
+  // vem outro número; nos demais casos, volta para a escolha do modo.
+  Future<void> _showEndDialog(
+    String title,
+    String message, {
+    bool continueRandom = false,
+  }) async {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -145,13 +205,17 @@ class _GamePageState extends ConsumerState<GamePage>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('OK'),
+            child: Text(continueRandom ? 'Próximo número' : 'OK'),
           ),
         ],
       ),
     );
     if (!mounted) return;
-    context.go('/modes');
+    if (continueRandom) {
+      _loadNewNumber();
+    } else {
+      context.go('/modes');
+    }
   }
 
   // ------------------------------------------------- mover os macarrões
@@ -210,7 +274,12 @@ class _GamePageState extends ConsumerState<GamePage>
         // Os pontos dos símbolos usados passam a fazer parte do score.
         final earned = soupPoints(_items);
         ref.read(scoreProvider.notifier).add(earned);
-        _showEndDialog('Acertou!', 'A igualdade está correta. +$earned pontos');
+        _showEndDialog(
+          'Acertou!',
+          'A igualdade está correta. +$earned pontos',
+          // O modo Aleatório não acaba: depois de acertar, vem outro número.
+          continueRandom: _isRandomMode,
+        );
       } else {
         _showMessage('Os dois lados são diferentes');
       }
@@ -436,10 +505,24 @@ class _GamePageState extends ConsumerState<GamePage>
                   const SizedBox(height: 16),
                   _plate(),
                   const SizedBox(height: 16),
-                  FilledButton.icon(
-                    onPressed: _check,
-                    icon: const Icon(Icons.play_arrow),
-                    label: const Text('Verificar'),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      FilledButton.icon(
+                        onPressed: _check,
+                        icon: const Icon(Icons.play_arrow),
+                        label: const Text('Verificar'),
+                      ),
+                      // Pular só existe no modo Aleatório.
+                      if (_isRandomMode)
+                        OutlinedButton.icon(
+                          onPressed: _skip,
+                          icon: const Icon(Icons.skip_next),
+                          label: Text('Pular (-$skipPenalty pontos)'),
+                        ),
+                    ],
                   ),
                 ],
               ),
