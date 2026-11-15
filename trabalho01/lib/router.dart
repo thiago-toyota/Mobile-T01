@@ -64,45 +64,49 @@ class _CircleReveal extends CustomClipper<Path> {
   bool shouldReclip(_CircleReveal oldClipper) => oldClipper.progress != progress;
 }
 
-final router = GoRouter(
-  initialLocation: '/login',
-  routes: [
-    // O login fica fora da moldura: não tem barra de navegação.
-    GoRoute(
-      path: '/login',
-      pageBuilder: (context, state) => _page(state, const LoginPage()),
-    ),
+// Cria o roteador. A página inicial vem de fora porque o aplicativo reabre
+// na última página guardada (veja persistence.dart e main.dart).
+GoRouter buildRouter({required String initialLocation}) {
+  return GoRouter(
+    initialLocation: initialLocation,
+    routes: [
+      // O login fica fora da moldura: não tem barra de navegação.
+      GoRoute(
+        path: '/login',
+        pageBuilder: (context, state) => _page(state, const LoginPage()),
+      ),
 
-    // Tudo que está aqui dentro aparece com a barra de navegação embaixo.
-    ShellRoute(
-      builder: (context, state, child) =>
-          AppShell(location: state.uri.path, child: child),
-      routes: [
-        // Fluxo: login -> modo -> nível -> (algarismos) -> jogo
-        GoRoute(
-          path: '/modes',
-          pageBuilder: (context, state) => _page(state, const ModePage()),
-        ),
-        GoRoute(
-          path: '/levels',
-          pageBuilder: (context, state) => _page(state, const LevelPage()),
-        ),
-        GoRoute(
-          path: '/digits',
-          pageBuilder: (context, state) => _page(state, const DigitsPage()),
-        ),
-        GoRoute(
-          path: '/game',
-          // Na partida, só a sopa do jogo: fundo liso.
-          pageBuilder: (context, state) =>
-              _page(state, const GamePage(), soup: false),
-        ),
-        // Não é mais usada pela barra (as configurações abrem numa janela).
-        GoRoute(
-          path: '/settings',
-          pageBuilder: (context, state) => _page(state, const SettingsPage()),
-        ),
-      ],
-    ),
-  ],
-);
+      // Tudo que está aqui dentro aparece com a barra de navegação embaixo.
+      ShellRoute(
+        builder: (context, state, child) =>
+            AppShell(location: state.uri.path, child: child),
+        routes: [
+          // Fluxo: login -> modo -> nível -> (algarismos) -> jogo
+          GoRoute(
+            path: '/modes',
+            pageBuilder: (context, state) => _page(state, const ModePage()),
+          ),
+          GoRoute(
+            path: '/levels',
+            pageBuilder: (context, state) => _page(state, const LevelPage()),
+          ),
+          GoRoute(
+            path: '/digits',
+            pageBuilder: (context, state) => _page(state, const DigitsPage()),
+          ),
+          GoRoute(
+            path: '/game',
+            // Na partida, só a sopa do jogo: fundo liso.
+            pageBuilder: (context, state) =>
+                _page(state, const GamePage(), soup: false),
+          ),
+          // Não é mais usada pela barra (as configurações abrem numa janela).
+          GoRoute(
+            path: '/settings',
+            pageBuilder: (context, state) => _page(state, const SettingsPage()),
+          ),
+        ],
+      ),
+    ],
+  );
+}

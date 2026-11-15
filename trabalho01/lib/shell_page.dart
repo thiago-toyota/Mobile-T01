@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'help_dialog.dart';
+import 'persistence.dart';
 import 'settings_dialog.dart';
 
 // Moldura que envolve todas as telas depois do login.
@@ -27,7 +28,8 @@ class AppShell extends StatelessWidget {
     return Scaffold(
       // Fundo liso: a sopa do fundo é desenhada por cada página (PageBackground).
       backgroundColor: colors.surface,
-      body: child,
+      // O RouteSaver guarda a página atual para o app reabrir nela.
+      body: RouteSaver(location: location, child: child),
       bottomNavigationBar: CurvedNavigationBar(
         // Configurações e ajuda são janelas, não páginas: a barra fica
         // sempre no ícone da casa.
