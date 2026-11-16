@@ -1,6 +1,6 @@
 {
-    "name": "trabalho01",
-    "short_name": "trabalho01",
+    "name": "login",
+    "short_name": "login",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
