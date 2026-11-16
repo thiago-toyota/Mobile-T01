@@ -40,17 +40,17 @@ enum AppFont {
 }
 
 // Cores semente disponíveis.
- Map<Color, String> seedColors = {
-  Color(0xFFF4CC5A): 'Caldo de galinha',
-  Color(0xFF2196F3): 'Azul',
-  Color(0xFF4CAF50): 'Verde',
-  Color(0xFFE57373): 'Vermelho',
-  Color(0xFFAB47BC): 'Roxo',
-  Color(0xFFFF9800): 'Laranja',
-  Color(0xFF00897B): 'Turquesa',
-  Color(0xFF795548): 'Marrom',
-  Color(0xFF607D8B): 'Azul acinzentado',
-  Color(0xFFE91E63): 'Rosa',
+Map<Color, String> seedColors = {
+  Color(0xFFF4CC5A): 'chickenBroth',
+  Color(0xFF2196F3): 'blue',
+  Color(0xFF4CAF50): 'green',
+  Color(0xFFE57373): 'red',
+  Color(0xFFAB47BC): 'purple',
+  Color(0xFFFF9800): 'orange',
+  Color(0xFF00897B): 'turquoise',
+  Color(0xFF795548): 'brown',
+  Color(0xFF607D8B): 'blueGrey',
+  Color(0xFFE91E63): 'pink',
 };
 
 // Estado de todas as configurações.
@@ -60,24 +60,29 @@ class AppSettings {
     this.fontScale = 1.0,
     this.font = AppFont.roboto,
     this.seedColor = const Color(0xFFF4CC5A),
+    this.locale,
   });
 
   final ThemeMode themeMode;
   final double fontScale;
   final AppFont font;
   final Color seedColor;
+   final Locale? locale;
 
   AppSettings copyWith({
     ThemeMode? themeMode,
     double? fontScale,
     AppFont? font,
     Color? seedColor,
+    Locale? locale,
+    bool clearLocale = false,
   }) {
     return AppSettings(
       themeMode: themeMode ?? this.themeMode,
       fontScale: fontScale ?? this.fontScale,
       font: font ?? this.font,
       seedColor: seedColor ?? this.seedColor,
+      locale: clearLocale ? null : locale ?? this.locale,
     );
   }
 }
@@ -103,9 +108,17 @@ class SettingsNotifier extends Notifier<AppSettings> {
     state = state.copyWith(seedColor: color);
   }
 
+  void setLocale(Locale? locale) {
+    state = state.copyWith(
+      locale: locale,
+      clearLocale: locale == null,
+    );
+  }
+
   void reset() {
     state = const AppSettings();
   }
+  
 }
 
 final settingsProvider =

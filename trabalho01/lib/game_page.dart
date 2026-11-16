@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:math';
 
@@ -14,6 +15,7 @@ import 'score.dart';
 import 'soup_bowl.dart';
 import 'state.dart';
 import 'tutorial_dialog.dart';
+import 'l10n/app_localizations.dart';
 
 const int _gameSeconds = 30;
 
@@ -28,28 +30,28 @@ class Piece {
 
 bool _isDigitToken(String t) => t.length == 1 && '0123456789'.contains(t);
 
-String _errorText(GameError error) {
+String _errorText(GameError error, AppLocalizations l10n) {
   switch (error) {
     case GameError.noEquals:
-      return 'Falta o sinal de =';
+      return l10n.errorNoEquals;
     case GameError.manyEquals:
-      return 'Use só um sinal de =';
+      return l10n.errorManyEquals;
     case GameError.emptySide:
-      return 'Os dois lados do = precisam ter algo';
+      return l10n.errorEmptySide;
     case GameError.missingOperator:
-      return 'Falta um operador entre dois números';
+      return l10n.errorMissingOperator;
     case GameError.badSyntax:
-      return 'Expressão inválida (confira operadores e parênteses)';
+      return l10n.errorBadSyntax;
     case GameError.divisionByZero:
-      return 'Divisão por zero';
+      return l10n.errorDivisionByZero;
     case GameError.nonIntegerDivision:
-      return 'Divisão não inteira não é permitida neste nível';
+      return l10n.errorNonIntegerDivision;
     case GameError.notInteger:
-      return 'Resultado não inteiro não é permitido neste nível';
+      return l10n.errorNotInteger;
     case GameError.badFactorial:
-      return 'Fatorial só vale para inteiros não negativos';
+      return l10n.errorBadFactorial;
     case GameError.undefined:
-      return 'Esta conta não tem resultado válido';
+      return l10n.errorUndefined;
   }
 }
 
@@ -72,7 +74,6 @@ class _GamePageState extends ConsumerState<GamePage>
 
   // Animação: os macarrões ficam balançando de leve no caldo (repete para sempre).
   late final AnimationController _bob;
-
 
   late final List<String> _tray; // macarrões do prato (infinitos)
 
@@ -111,19 +112,21 @@ class _GamePageState extends ConsumerState<GamePage>
   // Pular o número (só no modo Aleatório): confirma, tira pontos,
   // sorteia outro número e recomeça o relógio.
   Future<void> _skip() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Pular este número?'),
-        content: Text('Você perde $skipPenalty pontos e recebe outro número.'),
+        title: Text(l10n.skipNumberTitle),
+        content: Text(l10n.skipNumberMessage(skipPenalty)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancelar'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Pular'),
+            child: Text(l10n.skip),
           ),
         ],
       ),
@@ -185,7 +188,8 @@ class _GamePageState extends ConsumerState<GamePage>
       // O jogo não acaba: perde pontos e o relógio recomeça.
       ref.read(scoreProvider.notifier).penalize(timeoutPenalty);
       setState(() => _secondsLeft = _gameSeconds);
-      _showMessage('Tempo esgotado: -$timeoutPenalty pontos');
+      final l10n = AppLocalizations.of(context)!;
+      _showMessage(l10n.timeoutMessage(timeoutPenalty));
     }
   }
 
@@ -196,6 +200,8 @@ class _GamePageState extends ConsumerState<GamePage>
     String message, {
     bool continueRandom = false,
   }) async {
+    final l10n = AppLocalizations.of(context)!;
+
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -205,7 +211,7 @@ class _GamePageState extends ConsumerState<GamePage>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(continueRandom ? 'Próximo número' : 'OK'),
+            child: Text(continueRandom ? l10n.nextNumber : l10n.ok),
           ),
         ],
       ),
@@ -227,7 +233,8 @@ class _GamePageState extends ConsumerState<GamePage>
   void _place(int index, Piece piece) {
     // Veio do prato: aumenta a quantidade usada, então confere o limite.
     if (piece.fromIndex == null && _usedCount >= maxOperators) {
-      _showMessage('Limite de $maxOperators operadores na sopa');
+      final l10n = AppLocalizations.of(context)!;
+      _showMessage(l10n.operatorLimitMessage(maxOperators));
       return;
     }
     setState(() {
@@ -258,6 +265,8 @@ class _GamePageState extends ConsumerState<GamePage>
   // ----------------------------------------------------------- conferir
 
   void _check() {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       final correct = checkEquation(
         _items,
@@ -268,23 +277,26 @@ class _GamePageState extends ConsumerState<GamePage>
         _timer?.cancel();
         if (_tutorial) {
           // O tutorial não dá pontos.
-          _showEndDialog('Muito bem!', 'Você montou uma igualdade correta.');
+          _showEndDialog(
+            l10n.wellDone,
+            l10n.correctEquality,
+          );
           return;
         }
         // Os pontos dos símbolos usados passam a fazer parte do score.
         final earned = soupPoints(_items);
         ref.read(scoreProvider.notifier).add(earned);
         _showEndDialog(
-          'Acertou!',
-          'A igualdade está correta. +$earned pontos',
+          l10n.correctTitle,
+          l10n.correctScoreMessage(earned),
           // O modo Aleatório não acaba: depois de acertar, vem outro número.
           continueRandom: _isRandomMode,
         );
       } else {
-        _showMessage('Os dois lados são diferentes');
+        _showMessage(l10n.differentSides);
       }
     } on GameException catch (e) {
-      _showMessage(_errorText(e.error));
+      _showMessage(_errorText(e.error, l10n));
     }
   }
 
@@ -413,6 +425,8 @@ class _GamePageState extends ConsumerState<GamePage>
 
   // Prato com os macarrões (visualmente separado da sopa).
   Widget _plate() {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -423,7 +437,7 @@ class _GamePageState extends ConsumerState<GamePage>
       ),
       child: Column(
         children: [
-          Text('Prato de macarrões: arraste para a sopa ($_usedCount/$maxOperators)'),
+          Text(l10n.noodlePlate(_usedCount, maxOperators)),
           const SizedBox(height: 12),
           Wrap(
             alignment: WrapAlignment.center,
@@ -438,6 +452,7 @@ class _GamePageState extends ConsumerState<GamePage>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final digits = ref.watch(digitsProvider);
 
     // Se abriu esta tela sem escolher os algarismos (ex.: recarregou a página).
@@ -446,7 +461,7 @@ class _GamePageState extends ConsumerState<GamePage>
         body: Center(
           child: FilledButton(
             onPressed: () => context.go('/modes'),
-            child: const Text('Voltar ao início'),
+            child: Text(l10n.backToStart),
           ),
         ),
       );
@@ -460,7 +475,7 @@ class _GamePageState extends ConsumerState<GamePage>
         // No tutorial não há tempo nem pontos. Nos outros modos, o FittedBox
         // encolhe tempo e score juntos se a tela for estreita.
         title: _tutorial
-            ? const Text('Educativo')
+            ? Text(l10n.educational)
             : FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
@@ -468,11 +483,11 @@ class _GamePageState extends ConsumerState<GamePage>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Tempo: $_secondsLeft',
+                      l10n.timeRemaining(_secondsLeft),
                       style: TextStyle(color: _secondsLeft <= 10 ? Colors.red : null),
                     ),
                     const SizedBox(width: 24),
-                    Text('Score: $score'),
+                    Text(l10n.score(score)),
                   ],
                 ),
               ),
@@ -480,12 +495,12 @@ class _GamePageState extends ConsumerState<GamePage>
           // No tutorial, dá para abrir a explicação de novo.
           if (_tutorial)
             IconButton(
-              tooltip: 'Explicação',
+              tooltip: l10n.explanation,
               icon: const Icon(Icons.info_outline),
               onPressed: _showTutorial,
             ),
           IconButton(
-            tooltip: 'Limpar',
+            tooltip: l10n.clear,
             icon: const Icon(Icons.cleaning_services),
             onPressed: _clear,
           ),
@@ -513,14 +528,14 @@ class _GamePageState extends ConsumerState<GamePage>
                       FilledButton.icon(
                         onPressed: _check,
                         icon: const Icon(Icons.play_arrow),
-                        label: const Text('Verificar'),
+                        label: Text(l10n.verify),
                       ),
                       // Pular só existe no modo Aleatório.
                       if (_isRandomMode)
                         OutlinedButton.icon(
                           onPressed: _skip,
                           icon: const Icon(Icons.skip_next),
-                          label: Text('Pular (-$skipPenalty pontos)'),
+                          label: Text(l10n.skipWithPenalty(skipPenalty)),
                         ),
                     ],
                   ),

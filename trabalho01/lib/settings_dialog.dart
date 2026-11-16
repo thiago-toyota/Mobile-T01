@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'l10n/app_localizations.dart';
 
 import 'settings_page.dart';
 
@@ -23,7 +25,7 @@ Future<void> showSettingsDialog(BuildContext context) {
               top: 4,
               right: 4,
               child: IconButton(
-                tooltip: 'Fechar',
+                tooltip: AppLocalizations.of(context)!.close,
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.of(dialogContext).pop(),
               ),

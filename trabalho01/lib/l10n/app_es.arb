@@ -1,0 +1,193 @@
+
+{
+  "@@locale": "es",
+  "language": "Idioma",
+  "systemLanguage": "Idioma del sistema",
+  "music": "Música",
+  "backgroundMusic": "Música de fondo",
+  "tutorialWelcome": "Bienvenido al tutorial",
+  "tutorialObjective": "Objetivo: usar los 4 dígitos, siempre en el orden en que aparecen, para construir una igualdad. Aquí los dígitos son 2 3 3 3.",
+  "example": "Ejemplo:",
+  "tutorialEqualityCorrect": "Ambos lados dan 6, por lo que la igualdad es correcta.",
+  "tutorialStep1": "• Arrastra los fideos del plato a los espacios entre los dígitos.",
+  "tutorialStep2": "• Coloca el = y los operadores: 2 ? 3 ? 3 ? 3.",
+  "tutorialStep3": "• Para quitar un fideo de la sopa, arrástralo hacia afuera.",
+  "tutorialStep4": "• Cuando creas que está correcto, toca Verificar.",
+  "tutorialStep5": "• Aquí no hay tiempo ni puntos: siéntete libre de experimentar.",
+  "showExampleInSoup": "Ver el ejemplo en la sopa",
+  "understood": "Entendido",
+  "chickenBroth": "Caldo de pollo",
+  "blue": "Azul",
+  "green": "Verde",
+  "red": "Rojo",
+  "purple": "Morado",
+  "orange": "Naranja",
+  "turquoise": "Turquesa",
+  "brown": "Marrón",
+  "blueGrey": "Azul grisáceo",
+  "pink": "Rosa",
+  "chooseMode": "Elige el modo",
+  "educational": "Educativo",
+  "tutorialStepByStep": "Tutorial con un ejemplo paso a paso",
+  "specific": "Específico",
+  "chooseFourDigits": "Tú eliges los 4 dígitos",
+  "random": "Aleatorio",
+  "gameChoosesFourDigits": "El juego sortea los 4 dígitos",
+  "close": "Cerrar",
+  "settings": "Configuración",
+  "appearance": "Apariencia",
+  "appTheme": "Tema de la aplicación",
+  "system": "Sistema",
+  "light": "Claro",
+  "dark": "Oscuro",
+  "typography": "Tipografía",
+  "fontSize": "Tamaño de fuente",
+  "small": "Pequeño",
+  "medium": "Mediano",
+  "large": "Grande",
+  "fontFamily": "Familia tipográfica",
+  "font": "Fuente",
+  "preview": "Vista previa",
+  "previewTitle": "¡La sopa de cuentas está lista!",
+  "previewDescription": "Esta es una demostración de la tipografía seleccionada.",
+  "appColors": "Colores de la aplicación",
+  "chooseSeedColor": "Elige un color semilla",
+  "seedColorDescription": "El color seleccionado se utilizará para generar la paleta de la aplicación.",
+  "selectedColor": "Color seleccionado: {color}",
+  "@selectedColor": {
+    "placeholders": {
+      "color": {}
+    }
+  },
+  "custom": "Personalizada",
+  "disableMusic": "Desactivar música",
+  "enableMusic": "Activar música",
+  "restoreDefaultSettings": "Restaurar configuración predeterminada",
+  "close": "Cerrar",
+  "chooseMode": "Elige el modo",
+  "educational": "Educativo",
+  "tutorialStepByStep": "Tutorial con un ejemplo paso a paso",
+  "specific": "Específico",
+  "chooseFourDigits": "Tú eliges los 4 dígitos",
+  "random": "Aleatorio",
+  "gameChoosesFourDigits": "El juego sortea los 4 dígitos",
+  "appTitle": "Sopa de Cuentas",
+  "helpTitle": "Cómo jugar",
+  "helpObjective": "Objetivo: crear una igualdad utilizando los 4 dígitos en el orden en que aparecen. Ejemplo: 3 × 2 = 3 + 3.",
+  "helpRule1": "• Arrastra los fideos del plato a la sopa, antes, después o entre los dígitos.",
+  "helpRule2": "• Para quitar un fideo, arrástralo fuera de la sopa.",
+  "helpRule3": "• Puedes utilizar hasta 9 símbolos en total, incluidos los paréntesis y el signo =.",
+  "helpRule4": "• Dos dígitos uno al lado del otro no forman un número mayor: debe haber un operador entre ellos.",
+  "helpRule5": "• En los niveles Fácil e Intermedio, dos símbolos × consecutivos (× ×) representan una potencia.",
+  "helpRule6": "• Fuera del nivel Fácil, no se permiten divisiones ni resultados no enteros.",
+  "helpTimeAndPoints": "Tiempo y puntos",
+  "helpTimeRule1": "• Tienes 30 segundos. Pulsa Comprobar para verificar tu igualdad.",
+  "helpTimeRule2": "• Si se acaba el tiempo, pierdes 10 puntos y el temporizador se reinicia.",
+  "helpTimeRule3": "• Cada símbolo en la sopa otorga puntos: + − × ÷ suelo y techo valen 10; las potencias (× ×) y las raíces valen 20; ! y el valor absoluto valen 30. Los paréntesis no valen nada.",
+  "helpUnderstood": "Entendido",
+  "digitsPageTitle": "Elige los 4 dígitos",
+  "digitsPageStart": "Comenzar",
+  "levelPageTitle": "Elige el nivel",
+  "levelEasy": "Fácil",
+  "levelMedium": "Intermedio",
+  "levelAdvanced": "Avanzado",
+  "levelHard": "Difícil",
+  "errorNoEquals": "Falta el signo de =",
+  "errorManyEquals": "Usa solo un signo de =",
+  "errorEmptySide": "Ambos lados del = deben contener algo",
+  "errorMissingOperator": "Falta un operador entre dos números",
+  "errorBadSyntax": "Expresión inválida (comprueba los operadores y los paréntesis)",
+  "errorDivisionByZero": "División por cero",
+  "errorNonIntegerDivision": "La división no entera no está permitida en este nivel",
+  "errorNotInteger": "El resultado no entero no está permitido en este nivel",
+  "errorBadFactorial": "El factorial solo es válido para enteros no negativos",
+  "errorUndefined": "Este cálculo no tiene un resultado válido",
+
+  "skipNumberTitle": "¿Saltar este número?",
+  "skipNumberMessage": "Perderás {points} puntos y recibirás otro número.",
+  "@skipNumberMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "cancel": "Cancelar",
+  "skip": "Saltar",
+  "timeoutMessage": "Tiempo agotado: -{points} puntos",
+  "@timeoutMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "nextNumber": "Siguiente número",
+  "ok": "OK",
+  "wellDone": "¡Muy bien!",
+  "correctEquality": "Has creado una igualdad correcta.",
+  "correctTitle": "¡Correcto!",
+  "correctScoreMessage": "La igualdad es correcta. +{points} puntos",
+  "@correctScoreMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "operatorLimitMessage": "Límite de {maxOperators} operadores en la sopa",
+  "@operatorLimitMessage": {
+    "placeholders": {
+      "maxOperators": {
+        "type": "int"
+      }
+    }
+  },
+
+  "differentSides": "Los dos lados son diferentes",
+  "noodlePlate": "Plato de fideos: arrastra a la sopa ({usedCount}/{maxOperators})",
+  "@noodlePlate": {
+    "placeholders": {
+      "usedCount": {
+        "type": "int"
+      },
+      "maxOperators": {
+        "type": "int"
+      }
+    }
+  },
+
+  "backToStart": "Volver al inicio",
+  "educational": "Educativo",
+  "timeRemaining": "Tiempo: {seconds}",
+  "@timeRemaining": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "score": "Puntuación: {points}",
+  "@score": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "explanation": "Explicación",
+  "clear": "Limpiar",
+  "verify": "Comprobar",
+  "skipWithPenalty": "Saltar (-{points} puntos)",
+  "@skipWithPenalty": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  }
+}

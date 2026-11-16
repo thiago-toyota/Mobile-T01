@@ -1,0 +1,193 @@
+
+{
+  "@@locale": "en",
+  "language": "Language",
+  "systemLanguage": "System language",
+  "music": "Music",
+  "backgroundMusic": "Background music",
+  "tutorialWelcome": "Welcome to the tutorial",
+  "tutorialObjective": "Objective: use the 4 digits, always in the order they appear, to form an equation. Here the digits are 2 3 3 3.",
+  "example": "Example:",
+  "tutorialEqualityCorrect": "Both sides equal 6, so the equation is correct.",
+  "tutorialStep1": "• Drag the noodles from the plate into the spaces between the digits.",
+  "tutorialStep2": "• Place the = sign and the operators: 2 ? 3 ? 3 ? 3.",
+  "tutorialStep3": "• To remove a noodle from the soup, drag it outside.",
+  "tutorialStep4": "• When you think it's correct, tap Check.",
+  "tutorialStep5": "• There is no timer or scoring here: feel free to experiment.",
+  "showExampleInSoup": "See the example in the soup",
+  "understood": "Got it",
+  "chickenBroth": "Chicken broth",
+  "blue": "Blue",
+  "green": "Green",
+  "red": "Red",
+  "purple": "Purple",
+  "orange": "Orange",
+  "turquoise": "Turquoise",
+  "brown": "Brown",
+  "blueGrey": "Blue-grey",
+  "pink": "Pink",
+  "chooseMode": "Choose a mode",
+  "educational": "Educational",
+  "tutorialStepByStep": "Tutorial with a step-by-step example",
+  "specific": "Specific",
+  "chooseFourDigits": "You choose the 4 digits",
+  "random": "Random",
+  "gameChoosesFourDigits": "The game randomly selects the 4 digits",
+  "close": "Close",
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "appTheme": "App theme",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+  "typography": "Typography",
+  "fontSize": "Font size",
+  "small": "Small",
+  "medium": "Medium",
+  "large": "Large",
+  "fontFamily": "Font family",
+  "font": "Font",
+  "preview": "Preview",
+  "previewTitle": "The number soup is ready!",
+  "previewDescription": "This is a preview of the selected typography.",
+  "appColors": "App colors",
+  "chooseSeedColor": "Choose a seed color",
+  "seedColorDescription": "The selected color will be used to generate the app palette.",
+  "selectedColor": "Selected color: {color}",
+  "@selectedColor": {
+    "placeholders": {
+      "color": {}
+    }
+  },
+  "custom": "Custom",
+  "disableMusic": "Disable music",
+  "enableMusic": "Enable music",
+  "restoreDefaultSettings": "Restore default settings",
+  "close": "Close",
+  "chooseMode": "Choose a mode",
+  "educational": "Educational",
+  "tutorialStepByStep": "Tutorial with a step-by-step example",
+  "specific": "Specific",
+  "chooseFourDigits": "You choose the 4 digits",
+  "random": "Random",
+  "gameChoosesFourDigits": "The game randomly selects the 4 digits",
+  "appTitle": "Math Soup",
+  "levelPageTitle": "Choose the level",
+  "levelEasy": "Easy",
+  "levelMedium": "Intermediate",
+  "levelAdvanced": "Advanced",
+  "levelHard": "Hard",
+  "helpTitle": "How to play",
+  "helpObjective": "Objective: create an equality using the 4 digits in the order they appear. Example: 3 × 2 = 3 + 3.",
+  "helpRule1": "• Drag the noodles from the plate into the soup, before, after, or between the digits.",
+  "helpRule2": "• To remove a noodle, drag it out of the soup.",
+  "helpRule3": "• You can use up to 9 symbols in total, including parentheses and the = sign.",
+  "helpRule4": "• Two digits side by side do not form a larger number: an operator must be placed between them.",
+  "helpRule5": "• In Easy and Intermediate levels, two consecutive × symbols (× ×) represent an exponentiation.",
+  "helpRule6": "• Outside Easy mode, divisions and non-integer results are not allowed.",
+  "helpTimeAndPoints": "Time and points",
+  "helpTimeRule1": "• You have 30 seconds. Tap Check to test your equation.",
+  "helpTimeRule2": "• If time runs out, you lose 10 points and the timer restarts.",
+  "helpTimeRule3": "• Each symbol in the soup is worth points: + − × ÷ floor and ceiling are worth 10; exponentiation (× ×) and roots are worth 20; ! and absolute value are worth 30. Parentheses are worth nothing.",
+  "helpUnderstood": "Got it",
+  "digitsPageTitle": "Choose the 4 digits",
+  "digitsPageStart": "Start",
+  "errorNoEquals": "Missing the = sign",
+  "errorManyEquals": "Use only one = sign",
+  "errorEmptySide": "Both sides of the = sign must contain something",
+  "errorMissingOperator": "Missing an operator between two numbers",
+  "errorBadSyntax": "Invalid expression (check operators and parentheses)",
+  "errorDivisionByZero": "Division by zero",
+  "errorNonIntegerDivision": "Non-integer division is not allowed at this level",
+  "errorNotInteger": "Non-integer result is not allowed at this level",
+  "errorBadFactorial": "Factorial is only valid for non-negative integers",
+  "errorUndefined": "This calculation has no valid result",
+
+  "skipNumberTitle": "Skip this number?",
+  "skipNumberMessage": "You will lose {points} points and receive another number.",
+  "@skipNumberMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "cancel": "Cancel",
+  "skip": "Skip",
+  "timeoutMessage": "Time's up: -{points} points",
+  "@timeoutMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "nextNumber": "Next number",
+  "ok": "OK",
+  "wellDone": "Well done!",
+  "correctEquality": "You created a correct equality.",
+  "correctTitle": "Correct!",
+  "correctScoreMessage": "The equality is correct. +{points} points",
+  "@correctScoreMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "operatorLimitMessage": "Maximum of {maxOperators} operators in the soup",
+  "@operatorLimitMessage": {
+    "placeholders": {
+      "maxOperators": {
+        "type": "int"
+      }
+    }
+  },
+
+  "differentSides": "The two sides are different",
+  "noodlePlate": "Noodle plate: drag into the soup ({usedCount}/{maxOperators})",
+  "@noodlePlate": {
+    "placeholders": {
+      "usedCount": {
+        "type": "int"
+      },
+      "maxOperators": {
+        "type": "int"
+      }
+    }
+  },
+
+  "backToStart": "Back to start",
+  "educational": "Educational",
+  "timeRemaining": "Time: {seconds}",
+  "@timeRemaining": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "score": "Score: {points}",
+  "@score": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "explanation": "Explanation",
+  "clear": "Clear",
+  "verify": "Check",
+  "skipWithPenalty": "Skip (-{points} points)",
+  "@skipWithPenalty": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  }
+}

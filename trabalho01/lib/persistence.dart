@@ -27,6 +27,7 @@ const _themeModeKey = 'themeMode';
 const _fontScaleKey = 'fontScale';
 const _fontKey = 'font';
 const _seedColorKey = 'seedColor';
+const _localeKey = 'locale';
 
 // Páginas que podem ser reabertas. O login e as janelas ficam de fora.
 const _restorablePages = {'/modes', '/levels', '/digits', '/game'};
@@ -76,24 +77,40 @@ void _restore(ProviderContainer container, SharedPreferences prefs) {
 
   final seed = prefs.getInt(_seedColorKey);
   if (seed != null) settings.setSeedColor(Color(seed));
+
+  final locale = prefs.getString(_localeKey);
+  if (locale != null) {
+    settings.setLocale(Locale(locale));
+  }
 }
 
 void _watch(ProviderContainer container, SharedPreferences prefs) {
   container.listen<GameMode>(modeProvider, (_, mode) {
     prefs.setString(_modeKey, mode.name);
   });
+
   container.listen<Level>(levelProvider, (_, level) {
     prefs.setString(_levelKey, level.name);
   });
+
   container.listen<String>(digitsProvider, (_, digits) {
     prefs.setString(_digitsKey, digits);
   });
+
   container.listen<AppSettings>(settingsProvider, (_, settings) {
     prefs.setString(_themeModeKey, settings.themeMode.name);
     prefs.setDouble(_fontScaleKey, settings.fontScale);
     prefs.setString(_fontKey, settings.font.name);
+
     // ignore: deprecated_member_use
     prefs.setInt(_seedColorKey, settings.seedColor.value);
+
+    // Idioma
+    if (settings.locale != null) {
+      prefs.setString(_localeKey, settings.locale!.languageCode);
+    } else {
+      prefs.remove(_localeKey);
+    }
   });
 }
 

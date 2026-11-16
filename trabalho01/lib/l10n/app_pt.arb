@@ -1,0 +1,194 @@
+
+{
+  "@@locale": "pt",
+  "language": "Idioma",
+  "systemLanguage": "Idioma do sistema",
+  "music": "Música",
+  "backgroundMusic": "Música de fundo",
+  "tutorialWelcome": "Bem-vindo ao tutorial",
+  "tutorialObjective": "Objetivo: usar os 4 algarismos, sempre na ordem em que aparecem, para montar uma igualdade. Aqui os algarismos são 2 3 3 3.",
+  "example": "Exemplo:",
+  "tutorialEqualityCorrect": "Os dois lados dão 6, então a igualdade está correta.",
+  "tutorialStep1": "• Arraste os macarrões do prato para os espaços entre os algarismos.",
+  "tutorialStep2": "• Coloque o = e os operadores: 2 ? 3 ? 3 ? 3.",
+  "tutorialStep3": "• Para tirar um macarrão da sopa, arraste-o para fora.",
+  "tutorialStep4": "• Quando achar que está certo, toque em Verificar.",
+  "tutorialStep5": "• Aqui não há tempo nem pontos: fique à vontade para experimentar.",
+  "showExampleInSoup": "Ver o exemplo na sopa",
+  "understood": "Entendi",
+  "chickenBroth": "Caldo de galinha",
+  "blue": "Azul",
+  "green": "Verde",
+  "red": "Vermelho",
+  "purple": "Roxo",
+  "orange": "Laranja",
+  "turquoise": "Turquesa",
+  "brown": "Marrom",
+  "blueGrey": "Azul acinzentado",
+  "pink": "Rosa",
+  "chooseMode": "Escolha o modo",
+  "educational": "Educativo",
+  "tutorialStepByStep": "Tutorial com um exemplo passo a passo",
+  "specific": "Específico",
+  "chooseFourDigits": "Você escolhe os 4 algarismos",
+  "random": "Aleatório",
+  "gameChoosesFourDigits": "O jogo sorteia os 4 algarismos",
+  "close": "Fechar",
+  "settings": "Configurações",
+  "appearance": "Aparência",
+  "appTheme": "Tema do aplicativo",
+  "system": "Sistema",
+  "light": "Claro",
+  "dark": "Escuro",
+  "typography": "Tipografia",
+  "fontSize": "Tamanho da fonte",
+  "small": "Pequeno",
+  "medium": "Médio",
+  "large": "Grande",
+  "fontFamily": "Família tipográfica",
+  "font": "Fonte",
+  "preview": "Pré-visualização",
+  "previewTitle": "A sopa de contas está pronta!",
+  "previewDescription": "Esta é uma demonstração da tipografia selecionada.",
+  "appColors": "Cores do aplicativo",
+  "chooseSeedColor": "Escolha uma cor semente",
+  "seedColorDescription": "A cor selecionada será utilizada para gerar a paleta do aplicativo.",
+  "selectedColor": "Cor selecionada: {color}",
+  "@selectedColor": {
+    "placeholders": {
+      "color": {}
+    }
+  },
+  "custom": "Personalizada",
+  "disableMusic": "Desativar música",
+  "enableMusic": "Ativar música",
+  "restoreDefaultSettings": "Restaurar configurações padrão",
+  "@@locale": "pt",
+  "close": "Fechar",
+  "chooseMode": "Escolha o modo",
+  "educational": "Educativo",
+  "tutorialStepByStep": "Tutorial com um exemplo passo a passo",
+  "specific": "Específico",
+  "chooseFourDigits": "Você escolhe os 4 algarismos",
+  "random": "Aleatório",
+  "gameChoosesFourDigits": "O jogo sorteia os 4 algarismos",
+  "appTitle": "Sopa de Contas",
+  "levelPageTitle": "Escolha o nível",
+  "levelEasy": "Fácil",
+  "levelMedium": "Intermediário",
+  "levelAdvanced": "Avançado",
+  "levelHard": "Difícil",
+  "helpTitle": "Como jogar",
+  "helpObjective": "Objetivo: montar uma igualdade usando os 4 algarismos na ordem em que aparecem. Exemplo: 3 × 2 = 3 + 3.",
+  "helpRule1": "• Arraste os macarrões do prato para a sopa, antes, depois ou entre os algarismos.",
+  "helpRule2": "• Para tirar um macarrão, arraste-o para fora da sopa.",
+  "helpRule3": "• Você pode usar até 9 símbolos ao todo, incluindo parênteses e o sinal de =.",
+  "helpRule4": "• Dois algarismos lado a lado não formam um número maior: é preciso um operador entre eles.",
+  "helpRule5": "• Nos níveis Fácil e Intermediário, dois × seguidos (× ×) valem uma potência.",
+  "helpRule6": "• Fora do nível Fácil, divisões e resultados não inteiros não são permitidos.",
+  "helpTimeAndPoints": "Tempo e pontos",
+  "helpTimeRule1": "• Você tem 30 segundos. Toque em Verificar para testar.",
+  "helpTimeRule2": "• Se o tempo acabar, você perde 10 pontos e o relógio reinicia.",
+  "helpTimeRule3": "• Cada símbolo na sopa vale pontos: + − × ÷ base e teto valem 10; potência (× ×), raízes valem 20; ! e módulo valem 30. Parênteses não valem nada.",
+  "helpUnderstood": "Entendi",
+  "digitsPageTitle": "Escolha os 4 algarismos",
+  "digitsPageStart": "Começar",
+  "errorNoEquals": "Falta o sinal de =",
+  "errorManyEquals": "Use só um sinal de =",
+  "errorEmptySide": "Os dois lados do = precisam ter algo",
+  "errorMissingOperator": "Falta um operador entre dois números",
+  "errorBadSyntax": "Expressão inválida (confira operadores e parênteses)",
+  "errorDivisionByZero": "Divisão por zero",
+  "errorNonIntegerDivision": "Divisão não inteira não é permitida neste nível",
+  "errorNotInteger": "Resultado não inteiro não é permitido neste nível",
+  "errorBadFactorial": "Fatorial só vale para inteiros não negativos",
+  "errorUndefined": "Esta conta não tem resultado válido",
+
+  "skipNumberTitle": "Pular este número?",
+  "skipNumberMessage": "Você perde {points} pontos e recebe outro número.",
+  "@skipNumberMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "cancel": "Cancelar",
+  "skip": "Pular",
+  "timeoutMessage": "Tempo esgotado: -{points} pontos",
+  "@timeoutMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "nextNumber": "Próximo número",
+  "ok": "OK",
+  "wellDone": "Muito bem!",
+  "correctEquality": "Você montou uma igualdade correta.",
+  "correctTitle": "Acertou!",
+  "correctScoreMessage": "A igualdade está correta. +{points} pontos",
+  "@correctScoreMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "operatorLimitMessage": "Limite de {maxOperators} operadores na sopa",
+  "@operatorLimitMessage": {
+    "placeholders": {
+      "maxOperators": {
+        "type": "int"
+      }
+    }
+  },
+
+  "differentSides": "Os dois lados são diferentes",
+  "noodlePlate": "Prato de macarrões: arraste para a sopa ({usedCount}/{maxOperators})",
+  "@noodlePlate": {
+    "placeholders": {
+      "usedCount": {
+        "type": "int"
+      },
+      "maxOperators": {
+        "type": "int"
+      }
+    }
+  },
+
+  "backToStart": "Voltar ao início",
+  "educational": "Educativo",
+  "timeRemaining": "Tempo: {seconds}",
+  "@timeRemaining": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "score": "Score: {points}",
+  "@score": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+
+  "explanation": "Explicação",
+  "clear": "Limpar",
+  "verify": "Verificar",
+  "skipWithPenalty": "Pular (-{points} pontos)",
+  "@skipWithPenalty": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  }
+}

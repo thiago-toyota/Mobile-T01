@@ -1,13 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'music.dart';
 import 'persistence.dart';
 import 'router.dart';
 import 'state.dart';
+import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   // Necessário porque vamos usar o SharedPreferences antes do runApp.
@@ -126,8 +127,11 @@ class SoupApp extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
 
     return MaterialApp.router(
+      locale: settings.locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      title: 'Sopa de Contas',
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       routerConfig: router,
 
       theme: _buildTheme(settings, Brightness.light),

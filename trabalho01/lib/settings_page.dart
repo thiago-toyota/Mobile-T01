@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'l10n/app_localizations.dart';
 import 'music.dart';
 
 import 'state.dart';
@@ -12,12 +13,13 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configurações'),
+        title: Text(l10n.settings),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -28,7 +30,7 @@ class SettingsPage extends ConsumerWidget {
           // ---------------------------------------------------------------
 
           Text(
-            'Aparência',
+            l10n.appearance,
             style: Theme.of(context).textTheme.titleLarge,
           ),
 
@@ -40,7 +42,7 @@ class SettingsPage extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Tema do aplicativo'),
+                  Text(l10n.appTheme),
 
                   const SizedBox(height: 12),
 
@@ -48,21 +50,21 @@ class SettingsPage extends ConsumerWidget {
                     width: double.infinity,
                     child: SegmentedButton<ThemeMode>(
                       showSelectedIcon: false,
-                      segments: const [
+                      segments: [
                         ButtonSegment(
                           value: ThemeMode.system,
-                          label: Text('Sistema'),
-                          icon: Icon(Icons.settings_suggest),
+                          label: Text(l10n.system),
+                          icon: const Icon(Icons.settings_suggest),
                         ),
                         ButtonSegment(
                           value: ThemeMode.light,
-                          label: Text('Claro'),
-                          icon: Icon(Icons.light_mode),
+                          label: Text(l10n.light),
+                          icon: const Icon(Icons.light_mode),
                         ),
                         ButtonSegment(
                           value: ThemeMode.dark,
-                          label: Text('Escuro'),
-                          icon: Icon(Icons.dark_mode),
+                          label: Text(l10n.dark),
+                          icon: const Icon(Icons.dark_mode),
                         ),
                       ],
                       selected: {settings.themeMode},
@@ -83,7 +85,7 @@ class SettingsPage extends ConsumerWidget {
           // ---------------------------------------------------------------
 
           Text(
-            'Tipografia',
+            l10n.typography,
             style: Theme.of(context).textTheme.titleLarge,
           ),
 
@@ -98,7 +100,7 @@ class SettingsPage extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Tamanho da fonte'),
+                      Text(l10n.fontSize),
                       Text(
                         '${(settings.fontScale * 100).round()}%',
                         style: TextStyle(
@@ -121,15 +123,15 @@ class SettingsPage extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Pequeno'),
+                      Text(l10n.small),
                       Text(
-                        'Médio',
+                        l10n.medium,
                         style: TextStyle(
                           fontSize: 16 * settings.fontScale,
                         ),
                       ),
                       Text(
-                        'Grande',
+                        l10n.large,
                         style: TextStyle(
                           fontSize: 20 * settings.fontScale,
                         ),
@@ -139,16 +141,16 @@ class SettingsPage extends ConsumerWidget {
 
                   const Divider(height: 32),
 
-                  const Text('Família tipográfica'),
+                  Text(l10n.fontFamily),
 
                   const SizedBox(height: 12),
 
                   DropdownButtonFormField<AppFont>(
                     value: settings.font,
                     isExpanded: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Fonte',
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: l10n.font,
                     ),
                     items: AppFont.values.map((font) {
                       return DropdownMenuItem(
@@ -165,17 +167,17 @@ class SettingsPage extends ConsumerWidget {
 
                   const SizedBox(height: 20),
 
-                  const Text('Pré-visualização'),
+                  Text(l10n.preview),
 
                   const SizedBox(height: 8),
 
                   Text(
-                    'A sopa de contas está pronta!',
+                    l10n.previewTitle,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
 
                   Text(
-                    'Esta é uma demonstração da tipografia selecionada.',
+                    l10n.previewDescription,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -190,7 +192,7 @@ class SettingsPage extends ConsumerWidget {
           // ---------------------------------------------------------------
 
           Text(
-            'Cores do aplicativo',
+            l10n.appColors,
             style: Theme.of(context).textTheme.titleLarge,
           ),
 
@@ -202,13 +204,12 @@ class SettingsPage extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Escolha uma cor semente'),
+                  Text(l10n.chooseSeedColor),
 
                   const SizedBox(height: 8),
 
                   Text(
-                    'A cor selecionada será utilizada para gerar '
-                    'a paleta do aplicativo.',
+                    l10n.seedColorDescription,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
 
@@ -220,7 +221,19 @@ class SettingsPage extends ConsumerWidget {
                     children: [
                       for (final entry in seedColors.entries)
                         Tooltip(
-                          message: entry.value,
+                          message: switch (entry.value) {
+                            'chickenBroth' => l10n.chickenBroth,
+                            'blue' => l10n.blue,
+                            'green' => l10n.green,
+                            'red' => l10n.red,
+                            'purple' => l10n.purple,
+                            'orange' => l10n.orange,
+                            'turquoise' => l10n.turquoise,
+                            'brown' => l10n.brown,
+                            'blueGrey' => l10n.blueGrey,
+                            'pink' => l10n.pink,
+                            _ => entry.value,
+                          },
                           child: GestureDetector(
                             onTap: () {
                               notifier.setSeedColor(entry.key);
@@ -253,8 +266,21 @@ class SettingsPage extends ConsumerWidget {
                   const SizedBox(height: 16),
 
                   Text(
-                    'Cor selecionada: '
-                    '${seedColors[settings.seedColor] ?? 'Personalizada'}',
+                    l10n.selectedColor(
+                      switch (seedColors[settings.seedColor]) {
+                        'chickenBroth' => l10n.chickenBroth,
+                        'blue' => l10n.blue,
+                        'green' => l10n.green,
+                        'red' => l10n.red,
+                        'purple' => l10n.purple,
+                        'orange' => l10n.orange,
+                        'turquoise' => l10n.turquoise,
+                        'brown' => l10n.brown,
+                        'blueGrey' => l10n.blueGrey,
+                        'pink' => l10n.pink,
+                        _ => l10n.custom,
+                      }
+                    ),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -262,28 +288,86 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+                   const SizedBox(height: 24),
 
-          Consumer(
-            builder: (context, ref, child) {
-              final musicEnabled = ref.watch(musicProvider);
+          // ---------------------------------------------------------------
+          // Música
+          // ---------------------------------------------------------------
 
-              return IconButton(
-                tooltip: musicEnabled
-                    ? 'Desativar música'
-                    : 'Ativar música',
-                onPressed: () {
-                  ref.read(musicProvider.notifier).toggleMusic();
-                },
-                icon: Icon(
-                  musicEnabled
-                      ? Icons.music_note
-                      : Icons.music_off,
-                ),
-              );
-            },
+          Text(
+            l10n.music,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
 
+          const SizedBox(height: 12),
+
+          Card(
+            child: Consumer(
+              builder: (context, ref, child) {
+                final musicEnabled = ref.watch(musicProvider);
+
+                return SwitchListTile(
+                  secondary: Icon(
+                    musicEnabled
+                        ? Icons.music_note
+                        : Icons.music_off,
+                  ),
+                  subtitle: Text(
+                    musicEnabled
+                        ? l10n.disableMusic
+                        : l10n.enableMusic,
+                  ),
+                  value: musicEnabled,
+                  onChanged: (_) {
+                    ref.read(musicProvider.notifier).toggleMusic();
+                  },
+                );
+              },
+            ),
+          ),
+
+          Card(
+          child: RadioGroup<String>(
+            groupValue: settings.locale?.languageCode ?? 'system',
+            onChanged: (value) {
+              if (value == 'system') {
+                notifier.setLocale(null);
+              } else {
+                notifier.setLocale(Locale(value!));
+              }
+            },
+            child: Column(
+              children: [
+                RadioListTile<String>(
+                  value: 'system',
+                  title: Text(l10n.systemLanguage),
+                  secondary: const Icon(Icons.settings),
+                ),
+
+                const Divider(height: 1),
+
+                RadioListTile<String>(
+                  value: 'pt',
+                  title: const Text('🇧🇷  Português'),
+                ),
+
+                const Divider(height: 1),
+
+                RadioListTile<String>(
+                  value: 'es',
+                  title: const Text('🇪🇸  Español'),
+                ),
+
+                const Divider(height: 1),
+
+                RadioListTile<String>(
+                  value: 'en',
+                  title: const Text('🇺🇸  English'),
+                ),
+              ],
+            ),
+          ),
+        ),
           // ---------------------------------------------------------------
           // Restaurar configurações
           // ---------------------------------------------------------------
@@ -291,7 +375,7 @@ class SettingsPage extends ConsumerWidget {
           OutlinedButton.icon(
             onPressed: notifier.reset,
             icon: const Icon(Icons.restore),
-            label: const Text('Restaurar configurações padrão'),
+            label: Text(l10n.restoreDefaultSettings),
           ),
 
           const SizedBox(height: 24),

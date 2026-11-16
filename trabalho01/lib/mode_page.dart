@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import 'l10n/app_localizations.dart';
 
 import 'level.dart';
 import 'mode.dart';
@@ -14,13 +17,14 @@ class ModePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.read(modeProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     return SpoonMenu(
-      title: 'Escolha o modo',
+      title: l10n.chooseMode,
       items: [
         SpoonItem(
-          title: 'Educativo',
-          subtitle: 'Tutorial com um exemplo passo a passo',
+          title: l10n.educational,
+          subtitle: l10n.tutorialStepByStep,
           onTap: () {
             mode.select(GameMode.educational);
             // O tutorial é sempre com 2 3 3 3. Usa o nível com menos
@@ -31,16 +35,16 @@ class ModePage extends ConsumerWidget {
           },
         ),
         SpoonItem(
-          title: 'Específico',
-          subtitle: 'Você escolhe os 4 algarismos',
+          title: l10n.specific,
+          subtitle: l10n.chooseFourDigits,
           onTap: () {
             mode.select(GameMode.specific);
             context.push('/levels');
           },
         ),
         SpoonItem(
-          title: 'Aleatório',
-          subtitle: 'O jogo sorteia os 4 algarismos',
+          title: l10n.random,
+          subtitle: l10n.gameChoosesFourDigits,
           onTap: () {
             mode.select(GameMode.random);
             context.push('/levels');

@@ -1,9 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'state.dart';
+import 'l10n/app_localizations.dart';
 
 // Aqui o jogador digita os 4 algarismos. Depois o modo "aleatório"
 // vai sortear esses números e esta tela pode ficar só para o modo manual.
@@ -32,8 +34,10 @@ class _DigitsPageState extends ConsumerState<DigitsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Escolha os 4 algarismos')),
+      appBar: AppBar(title: Text(l10n.digitsPageTitle)),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 320),
@@ -67,7 +71,7 @@ class _DigitsPageState extends ConsumerState<DigitsPage> {
                 const SizedBox(height: 20),
                 FilledButton(
                   onPressed: _ready ? _start : null,
-                  child: const Text('Começar'),
+                  child: Text(l10n.digitsPageStart),
                 ),
               ],
             ),

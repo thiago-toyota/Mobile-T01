@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,13 +7,7 @@ import 'level.dart';
 import 'mode.dart';
 import 'spoon_menu.dart';
 import 'state.dart';
-
-const _levelNames = {
-  Level.easy: 'Fácil',
-  Level.medium: 'Intermediário',
-  Level.advanced: 'Avançado',
-  Level.hard: 'Difícil',
-};
+import 'l10n/app_localizations.dart';
 
 class LevelPage extends ConsumerWidget {
   const LevelPage({super.key});
@@ -42,12 +37,21 @@ class LevelPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final levelNames = {
+      Level.easy: l10n.levelEasy,
+      Level.medium: l10n.levelMedium,
+      Level.advanced: l10n.levelAdvanced,
+      Level.hard: l10n.levelHard,
+    };
+
     return SpoonMenu(
-      title: 'Escolha o nível',
+      title: l10n.levelPageTitle,
       items: [
         for (final level in Level.values)
           SpoonItem(
-            title: _levelNames[level]!,
+            title: levelNames[level]!,
             subtitle: _symbolsText(level),
             onTap: () => _choose(context, ref, level),
           ),
