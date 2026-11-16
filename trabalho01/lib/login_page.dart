@@ -23,6 +23,9 @@ class LoginPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 24),
+                  Text('Raul Yoshiyuki Komai'),
+                  Text('Thiago Masayuki Toyota'),
+                  const SizedBox(height: 24),
                   const TextField(
                     decoration: InputDecoration(
                       labelText: 'Usuário',
