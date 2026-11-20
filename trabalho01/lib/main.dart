@@ -10,9 +10,17 @@ import 'router.dart';
 import 'state.dart';
 import 'l10n/app_localizations.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 Future<void> main() async {
   // Necessário porque vamos usar o SharedPreferences antes do runApp.
   WidgetsFlutterBinding.ensureInitialized();
+
+    // Inicializa o Firebase.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   final prefs = await SharedPreferences.getInstance();
 

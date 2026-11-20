@@ -13,6 +13,11 @@ import 'settings_page.dart';
 import 'shell_page.dart';
 import 'soup_bowl.dart';
 
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'register_page.dart';
+
 // Monta uma página com fundo próprio e transição circular.
 // A página nova aparece dentro de um círculo que cresce a partir do centro
 // da tela, como a sopa se espalhando. Ao voltar, o círculo encolhe.
@@ -64,46 +69,101 @@ class _CircleReveal extends CustomClipper<Path> {
   bool shouldReclip(_CircleReveal oldClipper) => oldClipper.progress != progress;
 }
 
+// Atualiza o GoRouter quando o estado de autenticação muda.
+class _AuthRefreshListenable extends ChangeNotifier {
+  _AuthRefreshListenable(Stream<User?> stream) {
+    _subscription = stream.listen((_) {
+      notifyListeners();
+    });
+  }
+
+  late final StreamSubscription<User?> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
+
 // Cria o roteador. A página inicial vem de fora porque o aplicativo reabre
 // na última página guardada (veja persistence.dart e main.dart).
 GoRouter buildRouter({required String initialLocation}) {
+  final authRefresh = _AuthRefreshListenable(
+    FirebaseAuth.instance.authStateChanges(),
+  );
+
   return GoRouter(
     initialLocation: initialLocation,
+
+    refreshListenable: authRefresh,
+
+    // Protege as páginas internas.
+    redirect: (context, state) {
+      final loggedIn = FirebaseAuth.instance.currentUser != null;
+
+      final location = state.matchedLocation;
+
+      final isLogin = location == '/login';
+      final isRegister = location == '/register';
+
+      // Usuário não autenticado não pode acessar o jogo.
+      if (!loggedIn && !isLogin && !isRegister) {
+        return '/login';
+      }
+
+      // Usuário autenticado não precisa voltar ao login.
+      if (loggedIn && isLogin) {
+        return '/modes';
+      }
+
+      return null;
+    },
+
     routes: [
-      // O login fica fora da moldura: não tem barra de navegação.
+      // Login
       GoRoute(
         path: '/login',
-        pageBuilder: (context, state) => _page(state, const LoginPage()),
+        pageBuilder: (context, state) =>
+            _page(state, const LoginPage()),
       ),
 
-      // Tudo que está aqui dentro aparece com a barra de navegação embaixo.
+      // Cadastro
+      GoRoute(
+        path: '/register',
+        pageBuilder: (context, state) =>
+            _page(state, const RegisterPage()),
+      ),
+
+      // Demais páginas protegidas.
       ShellRoute(
         builder: (context, state, child) =>
             AppShell(location: state.uri.path, child: child),
         routes: [
-          // Fluxo: login -> modo -> nível -> (algarismos) -> jogo
           GoRoute(
             path: '/modes',
-            pageBuilder: (context, state) => _page(state, const ModePage()),
+            pageBuilder: (context, state) =>
+                _page(state, const ModePage()),
           ),
           GoRoute(
             path: '/levels',
-            pageBuilder: (context, state) => _page(state, const LevelPage()),
+            pageBuilder: (context, state) =>
+                _page(state, const LevelPage()),
           ),
           GoRoute(
             path: '/digits',
-            pageBuilder: (context, state) => _page(state, const DigitsPage()),
+            pageBuilder: (context, state) =>
+                _page(state, const DigitsPage()),
           ),
           GoRoute(
             path: '/game',
-            // Na partida, só a sopa do jogo: fundo liso.
             pageBuilder: (context, state) =>
                 _page(state, const GamePage(), soup: false),
           ),
-          // Não é mais usada pela barra (as configurações abrem numa janela).
           GoRoute(
             path: '/settings',
-            pageBuilder: (context, state) => _page(state, const SettingsPage()),
+            pageBuilder: (context, state) =>
+                _page(state, const SettingsPage()),
           ),
         ],
       ),

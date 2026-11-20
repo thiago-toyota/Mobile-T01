@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "205156906686",
+    "project_id": "mobile-t01",
+    "storage_bucket": "mobile-t01.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205156906686:android:47a9d8cc144b19d21a50ef",
+        "android_client_info": {
+          "package_name": "com.example.trabalho01"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "205156906686-61th3155ctov5csc8k2k9hlgedd8oc1t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu1hY5kq-6QPCw3DFYNPSxryrtGRGloWY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "205156906686-61th3155ctov5csc8k2k9hlgedd8oc1t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "205156906686-m9j93mg62n0n9k4clpiu383h835l9rq3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.trabalho01"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
