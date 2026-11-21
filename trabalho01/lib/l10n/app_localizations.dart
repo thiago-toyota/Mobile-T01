@@ -100,11 +100,59 @@ abstract class AppLocalizations {
     Locale('pt'),
   ];
 
+  /// No description provided for @loadingSoup.
+  ///
+  /// In pt, this message translates to:
+  /// **'Preparando a sopa...'**
+  String get loadingSoup;
+
+  /// No description provided for @loadError.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não foi possível carregar seus números resolvidos.'**
+  String get loadError;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tentar de novo'**
+  String get tryAgain;
+
+  /// No description provided for @alreadySolvedTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Você já resolveu este número'**
+  String get alreadySolvedTitle;
+
+  /// No description provided for @alreadySolvedMessage.
+  ///
+  /// In pt, this message translates to:
+  /// **'Você já resolveu o número {digits}. Quer resolver de novo?'**
+  String alreadySolvedMessage(String digits);
+
+  /// No description provided for @solveAgain.
+  ///
+  /// In pt, this message translates to:
+  /// **'Resolver de novo'**
+  String get solveAgain;
+
+  /// No description provided for @chooseAnother.
+  ///
+  /// In pt, this message translates to:
+  /// **'Escolher outro'**
+  String get chooseAnother;
+
   /// No description provided for @language.
   ///
   /// In pt, this message translates to:
   /// **'Idioma'**
   String get language;
+
+  /// No description provided for @logout.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sair da Conta'**
+  String get logout;
 
   /// No description provided for @systemLanguage.
   ///

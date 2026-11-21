@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'digits_page.dart';
-import 'game_page.dart';
+import 'game_loader.dart';
 import 'level_page.dart';
 import 'login_page.dart';
 import 'mode_page.dart';
@@ -16,7 +16,6 @@ import 'soup_bowl.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'register_page.dart';
 
 // Monta uma página com fundo próprio e transição circular.
 // A página nova aparece dentro de um círculo que cresce a partir do centro
@@ -105,10 +104,9 @@ GoRouter buildRouter({required String initialLocation}) {
       final location = state.matchedLocation;
 
       final isLogin = location == '/login';
-      final isRegister = location == '/register';
 
       // Usuário não autenticado não pode acessar o jogo.
-      if (!loggedIn && !isLogin && !isRegister) {
+      if (!loggedIn && !isLogin) {
         return '/login';
       }
 
@@ -121,18 +119,11 @@ GoRouter buildRouter({required String initialLocation}) {
     },
 
     routes: [
-      // Login
+      // Login e cadastro (a tela do firebase_ui_auth faz os dois)
       GoRoute(
         path: '/login',
         pageBuilder: (context, state) =>
             _page(state, const LoginPage()),
-      ),
-
-      // Cadastro
-      GoRoute(
-        path: '/register',
-        pageBuilder: (context, state) =>
-            _page(state, const RegisterPage()),
       ),
 
       // Demais páginas protegidas.
@@ -158,7 +149,7 @@ GoRouter buildRouter({required String initialLocation}) {
           GoRoute(
             path: '/game',
             pageBuilder: (context, state) =>
-                _page(state, const GamePage(), soup: false),
+                _page(state, const GameLoader(), soup: false),
           ),
           GoRoute(
             path: '/settings',

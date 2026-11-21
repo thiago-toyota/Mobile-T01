@@ -1,7 +1,17 @@
 
 {
   "@@locale": "en",
-  "language": "Language",
+    
+  "loadingSoup": "Preparing the soup...",
+  "loadError": "Could not load your solved numbers.",
+  "tryAgain":"Try again",
+  "alreadySolvedTitle": "You already solved this number",
+  "alreadySolvedMessage": "You already solved {digits}. Do you want to solve it again?",
+  "solveAgain": "Solve again",
+  "chooseAnother": "Choose another",
+
+  "language": "Language", 
+  "logout": "Sign out",
   "systemLanguage": "System language",
   "music": "Music",
   "backgroundMusic": "Background music",

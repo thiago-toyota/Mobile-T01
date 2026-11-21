@@ -27,7 +27,7 @@ class LevelPage extends ConsumerWidget {
 
     if (ref.read(modeProvider) == GameMode.random) {
       // Aleatório: sorteia os algarismos e vai direto para o jogo.
-      ref.read(digitsProvider.notifier).set(randomDigits());
+      ref.read(digitsProvider.notifier).set('');
       context.push('/game');
     } else {
       // Específico: o jogador digita os algarismos.

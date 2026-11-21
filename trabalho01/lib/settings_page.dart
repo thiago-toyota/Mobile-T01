@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'l10n/app_localizations.dart';
 import 'music.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+
 
 import 'state.dart';
 
@@ -367,6 +369,15 @@ class SettingsPage extends ConsumerWidget {
               ],
             ),
           ),
+        ),
+
+        OutlinedButton.icon(
+          onPressed: () async {
+            Navigator.of(context).pop(); // fecha a janela de configurações
+            await FirebaseUIAuth.signOut(); // o router leva para o login
+          },
+          icon: const Icon(Icons.logout),
+          label: Text(AppLocalizations.of(context)!.logout),
         ),
           // ---------------------------------------------------------------
           // Restaurar configurações

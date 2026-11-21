@@ -9,7 +9,33 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get loadingSoup => 'Preparando a sopa...';
+
+  @override
+  String get loadError => 'Não foi possível carregar seus números resolvidos.';
+
+  @override
+  String get tryAgain => 'Tentar de novo';
+
+  @override
+  String get alreadySolvedTitle => 'Você já resolveu este número';
+
+  @override
+  String alreadySolvedMessage(String digits) {
+    return 'Você já resolveu o número $digits. Quer resolver de novo?';
+  }
+
+  @override
+  String get solveAgain => 'Resolver de novo';
+
+  @override
+  String get chooseAnother => 'Escolher outro';
+
+  @override
   String get language => 'Idioma';
+
+  @override
+  String get logout => 'Sair da Conta';
 
   @override
   String get systemLanguage => 'Idioma do sistema';

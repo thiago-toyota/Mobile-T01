@@ -16,6 +16,7 @@ import 'soup_bowl.dart';
 import 'state.dart';
 import 'tutorial_dialog.dart';
 import 'l10n/app_localizations.dart';
+import 'solved_service.dart';
 
 const int _gameSeconds = 30;
 
@@ -142,9 +143,9 @@ class _GamePageState extends ConsumerState<GamePage>
   void _loadNewNumber() {
     // Sorteia outro número, diferente do atual.
     final old = ref.read(digitsProvider);
-    var digits = randomDigits();
+    var digits = pickUnsolvedDigits(ref.read(solvedProvider));
     while (digits == old) {
-      digits = randomDigits();
+      digits = pickUnsolvedDigits(ref.read(solvedProvider));
     }
     ref.read(digitsProvider.notifier).set(digits);
 
@@ -285,6 +286,7 @@ class _GamePageState extends ConsumerState<GamePage>
         }
         // Os pontos dos símbolos usados passam a fazer parte do score.
         final earned = soupPoints(_items);
+        ref.read(solvedProvider.notifier).markSolved(ref.read(digitsProvider), _level);
         ref.read(scoreProvider.notifier).add(earned);
         _showEndDialog(
           l10n.correctTitle,

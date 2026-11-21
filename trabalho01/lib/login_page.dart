@@ -1,196 +1,90 @@
-
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-import 'auth/auth_service.dart';
+import 'l10n/app_localizations.dart';
+import 'language_selector.dart';
 
-class LoginPage extends StatefulWidget {
+const _googleClientId = '205156906686-61th3155ctov5csc8k2k9hlgedd8oc1t.apps.googleusercontent.com';
+
+const _groupMembers = ['Raul Yoshiyuki Komai', 'Thiago Massayuki Toyota'];
+
+// Tela de login e cadastro, pronta do firebase_ui_auth.
+// Ela já tem: entrar com e-mail/senha, "criar conta" (cadastro),
+// "esqueci a senha" e o botão de entrar com o Google. Os textos e as
+// mensagens de erro dela são traduzidos pelo firebase_ui_localizations.
+//
+// Depois de entrar, o redirect do roteador (router.dart) leva para /modes.
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  Widget build(BuildContext context) {
+    // O SignInScreen ocupa a tela inteira. Para a largura ficar igual à das
+    // outras telas (e encolher junto com a janela), limitamos ele a 400 px
+    // de largura e centralizamos. Em telas menores que isso, ele usa a
+    // largura toda; em maiores, fica no meio. Como ele nunca passa do
+    // "breakpoint" (800 px), usa sempre o layout de uma coluna só, e a
+    // página rola quando o conteúdo não cabe na altura.
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: _signIn(),
+      ),
+    );
+  }
+
+  Widget _signIn() {
+    return SignInScreen(
+      providers: [
+        EmailAuthProvider(),
+        GoogleProvider(clientId: _googleClientId),
+      ],
+
+      // Em cima do formulário: nome do jogo e grupo. O cabeçalho tem altura
+      // limitada (headerMaxExtent), por isso só leva o que é pequeno.
+      headerMaxExtent: 220,
+      headerBuilder: (context, constraints, shrinkOffset) {
+        // Ao rolar a página, a altura do cabeçalho vai diminuindo até zero.
+        // Se o conteúdo fosse uma Column comum, ele passaria da altura e
+        // apareceria "bottom overflowed". Dentro de um SingleChildScrollView
+        // (com rolagem desligada), o conteúdo só é cortado, sem erro.
+        return const SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.all(20),
+          child: _GameTitle(),
+        );
+      },
+
+      // Embaixo do formulário: escolha do idioma (a especificação pede
+      // o seletor também na página de login).
+      footerBuilder: (context, action) {
+        return const Padding(
+          padding: EdgeInsets.only(top: 24, bottom: 24),
+          child: LanguageSelector(),
+        );
+      },
+    );
+  }
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  final _auth = AuthService();
-
-  bool _loading = false;
-  String? _error;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _login() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-
-    try {
-      await _auth.signIn(
-        _emailController.text,
-        _passwordController.text,
-      );
-
-      if (mounted) {
-        context.go('/modes');
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        switch (e.code) {
-          case 'invalid-email':
-            _error = 'E-mail inválido.';
-            break;
-          case 'user-not-found':
-            _error = 'Conta não encontrada.';
-            break;
-          case 'wrong-password':
-          case 'invalid-credential':
-          case 'invalid-login-credentials':
-            _error = 'E-mail ou senha incorretos.';
-            break;
-          case 'user-disabled':
-            _error = 'Esta conta foi desativada.';
-            break;
-          default:
-            _error = 'Não foi possível entrar. Tente novamente.';
-        }
-      });
-    } catch (e) {
-      setState(() {
-        _error = 'Ocorreu um erro inesperado.';
-      });
-    } finally {
-      if (mounted) {
-        setState(() => _loading = false);
-      }
-    }
-  }
-
-  Future<void> _loginGoogle() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-
-    try {
-      await _auth.signInWithGoogle();
-
-      if (mounted) {
-        context.go('/modes');
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _error = 'Não foi possível entrar com Google.';
-      });
-    } catch (e) {
-      setState(() {
-        _error = 'Ocorreu um erro ao entrar com Google.';
-      });
-    } finally {
-      if (mounted) {
-        setState(() => _loading = false);
-      }
-    }
-  }
+// Nome do jogo e integrantes do grupo.
+class _GameTitle extends StatelessWidget {
+  const _GameTitle();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Sopa de Contas',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  const Text('Raul Yoshiyuki Komai'),
-                  const Text('Thiago Massayuki Toyota'),
-
-                  const SizedBox(height: 24),
-
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'E-mail',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Senha',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  if (_error != null)
-                    Text(
-                      _error!,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-
-                  const SizedBox(height: 8),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _loading ? null : _login,
-                      child: _loading
-                          ? const CircularProgressIndicator()
-                          : const Text('Entrar'),
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: _loading ? null : _loginGoogle,
-                      icon: const Icon(Icons.login),
-                      label: const Text('Entrar com Google'),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  TextButton(
-                    onPressed: _loading
-                        ? null
-                        : () => context.go('/register'),
-                    child: const Text('Não tem uma conta? Cadastre-se'),
-                  ),
-                ],
-              ),
-            ),
-          ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.appTitle,
+          style: Theme.of(context).textTheme.headlineMedium,
+          textAlign: TextAlign.center,
         ),
-      ),
+        const SizedBox(height: 12),
+        for (final name in _groupMembers) Text(name),
+      ],
     );
   }
 }

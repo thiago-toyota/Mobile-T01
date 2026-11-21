@@ -9,7 +9,33 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get loadingSoup => 'Preparing the soup...';
+
+  @override
+  String get loadError => 'Could not load your solved numbers.';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
+  String get alreadySolvedTitle => 'You already solved this number';
+
+  @override
+  String alreadySolvedMessage(String digits) {
+    return 'You already solved $digits. Do you want to solve it again?';
+  }
+
+  @override
+  String get solveAgain => 'Solve again';
+
+  @override
+  String get chooseAnother => 'Choose another';
+
+  @override
   String get language => 'Language';
+
+  @override
+  String get logout => 'Sign out';
 
   @override
   String get systemLanguage => 'System language';

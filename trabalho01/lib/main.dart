@@ -10,7 +10,9 @@ import 'router.dart';
 import 'state.dart';
 import 'l10n/app_localizations.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -21,6 +23,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Na web, o Firebase demora um instante para lembrar quem estava logado.
+  // Esperamos esse primeiro aviso antes de abrir o app; senão o roteador
+  // acharia que ninguém está logado e mandaria para o login por engano
+  // (e o app não reabriria na última página).
+  await FirebaseAuth.instance.authStateChanges().first;
 
   final prefs = await SharedPreferences.getInstance();
 
@@ -136,7 +144,11 @@ class SoupApp extends ConsumerWidget {
 
     return MaterialApp.router(
       locale: settings.locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: [
+        ...AppLocalizations.localizationsDelegates,
+        // Traduz os textos da tela de login do Firebase UI.
+        FirebaseUILocalizations.delegate,
+      ],
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,

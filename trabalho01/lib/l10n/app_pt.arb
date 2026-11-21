@@ -1,7 +1,24 @@
 
 {
   "@@locale": "pt",
-  "language": "Idioma",
+  
+  "loadingSoup": "Preparando a sopa...",
+  "loadError": "Não foi possível carregar seus números resolvidos.",
+  "tryAgain":"Tentar de novo",
+  "alreadySolvedTitle": "Você já resolveu este número",
+  "alreadySolvedMessage": "Você já resolveu o número {digits}. Quer resolver de novo?",
+  "@alreadySolvedMessage": {
+  "placeholders": {
+    "digits": {
+      "type": "String"
+    }
+  }
+},
+  "solveAgain": "Resolver de novo",
+  "chooseAnother": "Escolher outro",
+
+  "language": "Idioma", 
+  "logout": "Sair da Conta",
   "systemLanguage": "Idioma do sistema",
   "music": "Música",
   "backgroundMusic": "Música de fundo",

@@ -1,7 +1,17 @@
 
 {
   "@@locale": "es",
-  "language": "Idioma",
+
+  "loadingSoup": "Preparando la sopa...",
+  "loadError": "No se pudieron cargar tus números resueltos.",
+  "tryAgain":"Intentar de nuevo",
+  "alreadySolvedTitle": "Ya resolviste este número",
+  "alreadySolvedMessage": "Ya resolviste el número {digits}. ¿Quieres resolverlo de nuevo?",
+  "solveAgain": "Resolver de nuevo",
+  "chooseAnother": "Elegir otro",
+
+  "language": "Idioma", 
+  "logout": "Cerrar sesión",
   "systemLanguage": "Idioma del sistema",
   "music": "Música",
   "backgroundMusic": "Música de fondo",
