@@ -379,24 +379,23 @@ class _GamePageState extends ConsumerState<GamePage>
     // Uma linha só (Row). O FittedBox encolhe a linha inteira se ela não couber
     // na largura da tigela (ex.: 4 algarismos + 9 símbolos, ou tela pequena).
     return SoupBowl(
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            for (var i = 0; i <= _items.length; i++) ...[
-              _insertionPoint(i),
-              if (i < _items.length)
-                _float(
-                  i,
-                  _isDigitToken(_items[i])
-                      ? Noodle(_items[i], big: true) // algarismo: fixo
-                      : _draggable(Piece(_items[i], fromIndex: i)),
-                ),
-            ],
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 1,
+        runSpacing: 1,
+        children: [
+          for (var i = 0; i <= _items.length; i++) ...[
+            _insertionPoint(i),
+            if (i < _items.length)
+              _float(
+                i,
+                _isDigitToken(_items[i])
+                    ? Noodle(_items[i], big: true) // algarismo: fixo
+                    : _draggable(Piece(_items[i], fromIndex: i)),
+              ),
           ],
-        ),
+        ],
       ),
     );
   }
