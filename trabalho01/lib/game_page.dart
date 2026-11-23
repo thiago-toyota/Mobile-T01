@@ -383,7 +383,7 @@ class _GamePageState extends ConsumerState<GamePage>
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 1,
-        runSpacing: 1,
+        runSpacing: 8,
         children: [
           for (var i = 0; i <= _items.length; i++) ...[
             _insertionPoint(i),
