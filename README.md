@@ -1,4 +1,4 @@
-# Mobile-T01
-flutter run -d web-server --web-port=5000
+# Desenvolvimento para Dispositivos Móveis - Trabalho 01
+Raul Komai, Thiago Toyota
 
-http://localhost:5000
+Link do aplicativo: https://mobile-t01-trabalho01.vercel.app
